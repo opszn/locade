@@ -16,7 +16,7 @@ import {
   parseListeners,
   processIdentity,
 } from '../server/identity.js';
-import { Store } from '../server/store.js';
+import { Store, LIBRARY_VERSION } from '../server/store.js';
 
 async function setup(t) {
   const root = await mkdtemp(path.join(os.tmpdir(), 'locade-identity-'));
@@ -156,7 +156,7 @@ test('v1 migration preserves user records, retains a recovery copy, and does not
   );
   const store = new Store(directory);
   await store.init();
-  assert.equal(store.state.version, 2);
+  assert.equal(store.state.version, LIBRARY_VERSION);
   assert.equal(store.state.projects[0].favorite, true);
   assert.deepEqual(
     JSON.parse(await readFile(path.join(directory, 'library.v1.backup.json'))),

@@ -118,6 +118,11 @@ function App() {
     (project) => project.id === selectedId,
   );
 
+  function updateLibrary(result) {
+    token.current = result.token;
+    setLibrary(result);
+  }
+
   async function request(endpoint, method = 'GET', data) {
     let response, result;
     try {
@@ -134,9 +139,11 @@ function App() {
     } catch {
       throw new Error('请求失败，请检查本机服务后重试。');
     }
-    if (!response.ok) throw new Error(result.error || t('本机服务暂不可用'));
-    token.current = result.token;
-    setLibrary(result);
+    if (!response.ok) {
+      if (result.library) updateLibrary(result.library);
+      throw new Error(result.error || t('本机服务暂不可用'));
+    }
+    updateLibrary(result);
     return result;
   }
 
@@ -147,7 +154,8 @@ function App() {
       setNotice('');
     }
     try {
-      await request(endpoint, method, data);
+      const result = await request(endpoint, method, data);
+      if (result.storageCleanupPending) return true;
       const messages = {
         scan: t('已重新发现本机网页；在线状态以本轮探测为准。'),
         bind: t('目录关联已保存。'),
@@ -166,6 +174,7 @@ function App() {
           ? t('前台自动发现已开启。')
           : t('前台自动发现已关闭，仍可手动重新发现。'),
         'open-directory': t('已向所选应用发送打开请求。'),
+        'retry-storage': t('本机图片清理已完成。'),
       };
       const message =
         messages[key] ||
@@ -579,6 +588,13 @@ function App() {
               {t(notice)}
             </p>
           )}
+          {!openPanel && (
+            <StorageWarning
+              library={library}
+              disabled={disabled}
+              action={action}
+            />
+          )}
           {library?.scanLimited && (
             <p className="notice">
               {t(
@@ -749,6 +765,11 @@ function App() {
               {t(error)}
             </p>
           )}
+          <StorageWarning
+            library={library}
+            disabled={disabled}
+            action={action}
+          />
           <div className="dialog-actions">
             <button
               type="button"
@@ -789,6 +810,7 @@ function App() {
             {t(notice)}
           </p>
         )}
+        <StorageWarning library={library} disabled={disabled} action={action} />
       </dialog>
 
       <dialog
@@ -807,6 +829,7 @@ function App() {
           request={reviewRequest}
           close={() => reviewDialog.current.close()}
         />
+        <StorageWarning library={library} disabled={disabled} action={action} />
       </dialog>
 
       <dialog
@@ -901,9 +924,9 @@ function App() {
           disabled={disabled}
           action={action}
           getToken={() => token.current}
+          onRefresh={updateLibrary}
           onRestore={(result) => {
-            token.current = result.token;
-            setLibrary(result);
+            updateLibrary(result);
             setTab('all');
           }}
           reportError={setError}
@@ -919,6 +942,7 @@ function App() {
             {t(notice)}
           </p>
         )}
+        <StorageWarning library={library} disabled={disabled} action={action} />
         <div className="dialog-actions">
           <button
             className="button primary"
@@ -928,6 +952,33 @@ function App() {
           </button>
         </div>
       </dialog>
+    </div>
+  );
+}
+
+function StorageWarning({ library, disabled, action }) {
+  const { t } = useI18n();
+  if (!library?.storageCleanupPending) return null;
+  return (
+    <div
+      className="notice error storage-warning"
+      role="alert"
+      aria-label={t('本机图片清理未完成')}
+    >
+      <p>
+        {t(
+          '部分旧图或临时图片尚未从磁盘清除。当前显示的是已保存的资料；未清理图片不会通过 Locade 展示。请检查磁盘权限或空间后重试，清理完成前不要分享资料目录。',
+        )}
+      </p>
+      <p>{t('文件系统错误：{0}', [library.storageCleanupCode || 'UNKNOWN'])}</p>
+      <button
+        type="button"
+        className="button outline"
+        disabled={disabled}
+        onClick={() => action('retry-storage', 'storage/cleanup')}
+      >
+        {t('重试图片清理')}
+      </button>
     </div>
   );
 }

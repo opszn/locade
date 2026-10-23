@@ -1,0 +1,16 @@
+node_modules/
+dist/
+.locade/
+test-results/
+.DS_Store
+release/
+.build-cache/
+.env
+.env.*
+!.env.example
+*.log
+*.pem
+*.key
+*.p12
+*.pfx
+.npmrc.local

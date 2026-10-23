@@ -1,0 +1,101 @@
+@font-face {
+  font-family: Board;
+  src: local('Avenir Next');
+}
+:root {
+  color: #252722;
+  background: #f4f1e9;
+  font-family: Board, 'Trebuchet MS', 'PingFang SC', sans-serif;
+}
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 28px 20px;
+  background-image: radial-gradient(#25272216 0.7px, transparent 0.7px);
+  background-size: 12px 12px;
+}
+main {
+  max-width: 560px;
+  width: 100%;
+  padding: 42px;
+  border: 1px solid #dedcd2;
+  border-top: 4px solid #f35b35;
+  border-radius: 12px;
+  background: #fbf9f4;
+}
+img {
+  width: 126px;
+  height: 40px;
+  object-fit: contain;
+}
+.rule {
+  height: 1px;
+  background: #dedcd2;
+  margin: 24px 0;
+}
+.eyebrow {
+  color: #73756b;
+  font-size: 9px;
+  letter-spacing: 1.6px;
+}
+h1 {
+  font:
+    500 33px/1.5 'Baskerville',
+    'Songti SC',
+    Georgia,
+    serif;
+  margin: 18px 0;
+}
+p {
+  font-size: 13px;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+}
+p[role='alert'] {
+  padding: 14px;
+  background: #f8e3d8;
+  border-radius: 5px;
+  color: #98371d;
+}
+.help,
+footer {
+  color: #73756b;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+.button {
+  display: inline-flex;
+  justify-content: space-between;
+  gap: 25px;
+  padding: 13px 18px;
+  margin-top: 15px;
+  background: #252722;
+  color: #f4f1e9;
+  border-radius: 5px;
+  font-size: 12px;
+}
+a:focus-visible {
+  outline: 2px solid #f35b35;
+  outline-offset: 5px;
+}
+footer {
+  border-top: 1px solid #dedcd2;
+  margin-top: 35px;
+  padding-top: 18px;
+  font-size: 10px;
+}
+@media (max-width: 400px) {
+  main {
+    padding: 26px 20px;
+  }
+  h1 {
+    font-size: 28px;
+  }
+}

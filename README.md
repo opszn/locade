@@ -87,7 +87,7 @@ npm run dev              # 构建 + 服务端 watch；前端改动后仍需重�
 
 测试使用隔离资料库、受控网页和自有进程。浏览器应用测试拒绝原生 alert / confirm / prompt；文件选择、下载和显式打开项目 / 编辑器仍使用正规系统集成。不要同时运行会自动发现的日用实例和根路径 HTML 测试，避免将测试页收录到真实库。
 
-已配置 [GitHub Actions](https://github.com/opszn/locade/actions)：macOS、Node 24 / 26 官方源和 Node 24 国内镜像，覆盖源码检查、格式、核心、浏览器与系统发现。Alpha 版本准备后的本地核心双 Node **74/74**、浏览器 **10/10**、系统发现双 Node **7/7**通过；新增版本一致性护栏计入核心。浏览器复用现有匹配版本，不冒称从零下载或干净机器验收。远端状态以 Actions 的具体提交结果为准，完整限制见 [验收记录](docs/ACCEPTANCE.md)。
+真实 [GitHub CI 39892036075](https://github.com/opszn/locade/actions/runs/39892036075) 已在首次公开前通过：macOS、Node 24 / 26 官方源和 Node 24 国内镜像三组，各核心 **74/74**、浏览器 **10/10**、真实系统发现 **7/7**。远端 runner 也完成匹配 Chromium / headless shell 下载；这是源码 CI，不是原生 App 或全部干净目标机器验收。本地双 Node 回归同样通过，完整限制见 [验收记录](docs/ACCEPTANCE.md)；后续提交状态以 [Actions](https://github.com/opszn/locade/actions) 为准。
 
 ## 文档与状态
 
@@ -99,6 +99,6 @@ npm run dev              # 构建 + 服务端 watch；前端改动后仍需重�
 
 本项目采用 [MIT 许可证](LICENSE)，第三方依赖仍遵循各自许可证。`private: true` 仅用于防止误发布到 npm，不影响本仓库的 MIT 授权；当前没有发布 npm 包。名称、npm 包名、域名与商标尚未完成核查。
 
-GitHub 仓库为 [opszn/locade](https://github.com/opszn/locade)，按“私有验证 CI 后再公开”推进源码 Alpha。正式 App 分发、Developer ID / 公证、登录项 / 干净机器验收、完整 PRD 与一周真实使用验证仍未完成；既有本地 App / DMG 不代表最新源码，不作为本次 GitHub 附件。首发说明见 [Alpha 发布说明](docs/RELEASE_NOTES.md)。
+GitHub 仓库 [opszn/locade](https://github.com/opszn/locade) 已在私有 CI 通过后公开。正式 App 分发、Developer ID / 公证、登录项 / 干净机器验收、完整 PRD 与一周真实使用验证仍未完成；既有本地 App / DMG 不代表最新源码，不作为本次 GitHub 附件。首发说明见 [Alpha 发布说明](docs/RELEASE_NOTES.md)。
 
 贡献前请读 [贡献说明](CONTRIBUTING.md)，安全问题请读 [安全说明](SECURITY.md)。

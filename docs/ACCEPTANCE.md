@@ -10,7 +10,7 @@
 
 已完成两份隔离目录的干净 npm 安装：官方 npm / npmmirror 各安装 23 个当前平台包；590 个普通文件的相对路径和 SHA256 全相同，两份锁文件未变。锁文件 47 个下载 URL 全为公共官方源，其他平台的可选包未在本机安装。官方源 / 国内镜像与当前工作区生产构建逐文件一致。Playwright 空缓存 Chromium 下载因官方 CDN 缓慢在约 20% 主动中止；三组浏览器回归复用现有匹配版本，不是干净下载 / 干净机器验证。公共官方 registry 的 npm audit 当前返回 0 条已知漏洞，不代表没有未知风险。
 
-GitHub Actions 已配置 macOS / Node 24、26 官方源与 Node 24 镜像矩阵。用户已授权并创建 opszn/locade 私有仓库，计划先真实运行 CI 后公开源码 Alpha；**当前远端执行结果尚未取得**，本地等价步骤不等于 GitHub runner 的实测。
+首次公开前已实际运行 [GitHub CI 39892036075](https://github.com/opszn/locade/actions/runs/39892036075)，对应提交 `58352add550122a2328ae22957dc9b83e8543056`：macOS / Node 24、26 官方源与 Node 24 镜像三组均成功，各核心 74 / 浏览器 10 / 系统发现 7，无测试失败或跳过。三组 runner 实际下载了匹配 Chromium / headless shell，再执行浏览器测试；补足源码 CI 环境的下载证据，不等于原生或所有干净机器验收。仓库随后转公开，GitHub 确认 MIT、私密漏洞报告 enabled=true；后续提交须看各自 CI。
 
 ## 功能验收矩阵
 

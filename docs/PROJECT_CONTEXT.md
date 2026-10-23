@@ -85,3 +85,5 @@ GitHub CLI 授权由用户在官方设备页完成；不读取 Chrome cookies、
 - 实际新增核心 6 项与浏览器 4 流程；最终本地 Node 24 / 26 各 81 / 14 / 7 无失败跳过。截图已目视检查，只有受控页面 / 临时目录；原始证据及资料 / 原生文件保留基线在 `test-results/alpha2-first-use/`，不上传。旧 App / DMG / 固定副本不重建或运行；包版本和 Alpha.1 tag 不改变。
 
 下一步重点是 [A2-04 故障注入](https://github.com/opszn/locade/issues/2)、[A2-05 公开反馈与文档](https://github.com/opszn/locade/issues/3)。[陌生开发者试用](https://github.com/opszn/locade/issues/4) 和 [一周真人记录](https://github.com/opszn/locade/issues/5) 仍待实际参与，不用自动回归勾选；未主动联系他人、注册提醒或遥测。
+
+Alpha.2 首个代码提交 `4a1a5a296786098c5b13686bb177ab8e6f3673ec` 的 PR CI 39913063816 与分支 CI 39913056431 已实际三组通过（各核心 81 / 浏览器 14 / 系统发现 7）；[PR #6](https://github.com/opszn/locade/pull/6) 待合入。开发 Web 已恢复，用户字段 / 设置 / PNG 与旧原生文件身份哈希核对保留。所属终端 / 实例只写私有 preservation-final.json，不在此公开；后续源码变更先关注 #2 故障注入，不回到重复尝试受阻原生或提前发布 Alpha.2。

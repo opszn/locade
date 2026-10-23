@@ -17,9 +17,9 @@
 - [x] 92 文件暂存清单逐字节核对；Gitleaks 源码和完整首次 Git 历史无发现，不提交资料、缓存、日志、备份和旧包。
 - [x] 私有仓库提交 `58352add550122a2328ae22957dc9b83e8543056` 的 [CI 39892036075](https://github.com/opszn/locade/actions/runs/39892036075) 三组全部成功，各核心 74、浏览器 10、系统发现 7；runner 实际下载匹配 Chromium / headless shell。
 - [x] 上述 CI 通过与源码复核后转公开；GitHub 确认 MIT，私密漏洞报告 enabled=true，SECURITY.md 已提供入口。
-- [ ] 发布 `v0.3.0-alpha.1` 预发布，仅提供 GitHub 源码，不上传旧 App / DMG、私有报告或 npm。
+- [x] 已发布 [v0.3.0-alpha.1](https://github.com/opszn/locade/releases/tag/v0.3.0-alpha.1) 预发布（prerelease=true、draft=false、无上传附件），tag 精确指向 `ca37a1afc943cce7a906f7c6169e934046b6c0bf`，其独立 [CI 39899446370](https://github.com/opszn/locade/actions/runs/39899446370) 三组成功。仅 GitHub 源码，不上传旧 App / DMG、私有报告或 npm。
 
-**首次远端 CI / 公开已完成，Release 正在收尾。** 私有阶段安全报告查询曾为 404，公开后已启用并查询 enabled=true，没有创建测试漏洞报告或承诺 SLA。当前同步公开文档 / 发布说明的后续提交仍须取得其自己的 CI 结果，不能沿用首个成功冒充所有提交通过。
+**源码 Alpha 公开与预发布已完成。** 私有阶段安全报告查询曾为 404，公开后已启用并查询 enabled=true，没有创建测试漏洞报告或承诺 SLA。发布后的状态文档提交仍须取得其自己的 CI，不能沿用 Release 提交的成功冒充所有提交通过；tag 保留在已经测试的发布提交，不移动或改写历史。
 
 ## 延续的安装与安全证据
 

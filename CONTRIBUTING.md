@@ -35,4 +35,4 @@ npm run test:discovery
 
 不提交 `.locade/`、`test-results/`、`.build-cache/`、`node_modules/`、`dist/`、`release/`、环境文件、私钥、真实项目截图或完整个人路径。报告 bug 时用受控示例，注明 Node / macOS / 操作步骤和实际结果，不贴会话令牌、资料库、备份或敏感日志。
 
-GitHub CI 仅配置，推送后才有远端执行结果。工作流不发布包、不构建 / 安装原生、不访问签名凭据或注册登录项。
+GitHub CI 已实际执行并通过，具体提交结果见 [Actions](https://github.com/opszn/locade/actions)。每个后续改动须等待自己的 CI，不能沿用历史成功。工作流不发布包、不构建 / 安装原生、不访问签名凭据或注册登录项。

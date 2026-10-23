@@ -4,7 +4,7 @@
 
 ## 本轮完成
 
-- 已核验 GitHub 登录为个人账号 opszn，新建 [opszn/locade](https://github.com/opszn/locade) 私有仓库，没有覆盖既有仓库。
+- 已核验 GitHub 登录为个人账号 opszn，新建 [opszn/locade](https://github.com/opszn/locade)；先私有通过 CI 后转公开，没有覆盖既有仓库。
 - MIT LICENSE、package.json / 锁文件根许可及 `0.3.0-alpha.1` 版本已同步；第三方版本 / integrity / 许可不变，保留 `private: true` 防止 npm 误发布。
 - API / library 版本由 package.json 统一；未来原生构建工具的版本和 MIT 文件相应同步，但没有执行构建、运行 / 重签 / 覆盖旧 App / DMG / 固定副本。
 - README 使用隔离五项目回归的实际 UI 图，不含用户项目或私人封面；公开图片按精确路径白名单审查，PNG 无文本元数据。首发中文说明见 RELEASE_NOTES.md。
@@ -14,12 +14,12 @@
 
 - [x] 用户确认 MIT、个人账号和分阶段公开计划；官方 CLI 浏览器授权由用户完成，未读取浏览器 cookies / 密码。
 - [x] 创建私有仓库，确认 GitHub Actions 启用。
-- [ ] 按公开源码清单审核暂存 / 首次提交，额外运行 Gitleaks；不提交资料、缓存、日志、备份和旧包。
-- [ ] 推送私有仓库；真实运行 macOS / Node 24、26 官方源与 Node 24 镜像三组 CI，取得结果而非只配置。
-- [ ] CI 通过与源码复核后转公开；启用并核实 GitHub 私密漏洞报告入口。
+- [x] 92 文件暂存清单逐字节核对；Gitleaks 源码和完整首次 Git 历史无发现，不提交资料、缓存、日志、备份和旧包。
+- [x] 私有仓库提交 `58352add550122a2328ae22957dc9b83e8543056` 的 [CI 39892036075](https://github.com/opszn/locade/actions/runs/39892036075) 三组全部成功，各核心 74、浏览器 10、系统发现 7；runner 实际下载匹配 Chromium / headless shell。
+- [x] 上述 CI 通过与源码复核后转公开；GitHub 确认 MIT，私密漏洞报告 enabled=true，SECURITY.md 已提供入口。
 - [ ] 发布 `v0.3.0-alpha.1` 预发布，仅提供 GitHub 源码，不上传旧 App / DMG、私有报告或 npm。
 
-**当前远端 CI / 公开 / Release 尚未完成，不提前宣称。** GitHub 私密漏洞报告在当前私有状态查询返回 404，安全通道待公开后配置和验证。
+**首次远端 CI / 公开已完成，Release 正在收尾。** 私有阶段安全报告查询曾为 404，公开后已启用并查询 enabled=true，没有创建测试漏洞报告或承诺 SLA。当前同步公开文档 / 发布说明的后续提交仍须取得其自己的 CI 结果，不能沿用首个成功冒充所有提交通过。
 
 ## 延续的安装与安全证据
 

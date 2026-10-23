@@ -1,3 +1,4 @@
+import { useI18n } from './I18n.jsx';
 import React, {
   createContext,
   useCallback,
@@ -14,14 +15,15 @@ export function useConfirmation() {
   return useContext(ConfirmationContext);
 }
 
-export const projectSummary = (project) => ({
+export const projectSummary = (project, t) => ({
   id: project.id,
   name: project.name,
-  directory: project.identity?.directory || '尚未关联目录',
+  directory: project.identity?.directory || t('尚未关联目录'),
   address: project.url,
 });
 
 export function ConfirmationProvider({ children }) {
+  const { t } = useI18n();
   const [choice, setChoice] = useState(null);
   const [checked, setChecked] = useState(false);
   const pending = useRef(null);
@@ -115,25 +117,25 @@ export function ConfirmationProvider({ children }) {
                 <button
                   type="button"
                   className="icon-button"
-                  aria-label="关闭操作确认"
+                  aria-label={t('关闭操作确认')}
                   onClick={() => finish(false)}
                 >
                   ×
                 </button>
               </div>
-              <h2 id="confirmation-title">{choice.title}</h2>
-              <p id="confirmation-description">{choice.description}</p>
+              <h2 id="confirmation-title">{t(choice.title)}</h2>
+              <p id="confirmation-description">{t(choice.description)}</p>
             </div>
             <div
               className="confirmation-content"
               tabIndex={choice.items?.length ? 0 : undefined}
               role="region"
-              aria-label="操作详情"
+              aria-label={t('操作详情')}
             >
               {choice.items?.length > 0 && (
                 <ul
                   className="confirmation-items"
-                  aria-label="本次操作涉及的记录"
+                  aria-label={t('本次操作涉及的记录')}
                 >
                   {choice.items.map((item) => (
                     <li key={item.id}>
@@ -155,13 +157,13 @@ export function ConfirmationProvider({ children }) {
                     onChange={(event) => setChecked(event.target.checked)}
                   />
                   <span>
-                    <strong>{choice.checkbox.label}</strong>
-                    <small>{choice.checkbox.description}</small>
+                    <strong>{t(choice.checkbox.label)}</strong>
+                    <small>{t(choice.checkbox.description)}</small>
                   </span>
                 </label>
               )}
               {choice.note && (
-                <p className="confirmation-note">{choice.note}</p>
+                <p className="confirmation-note">{t(choice.note)}</p>
               )}
             </div>
             <div className="dialog-actions confirmation-actions">
@@ -171,10 +173,10 @@ export function ConfirmationProvider({ children }) {
                 className="button outline"
                 onClick={() => finish(false)}
               >
-                取消
+                {t('取消')}
               </button>
               <button className="button primary" type="submit">
-                {choice.confirmLabel}
+                {t(choice.confirmLabel)}
               </button>
             </div>
           </form>

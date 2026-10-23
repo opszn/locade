@@ -279,6 +279,7 @@ test(
     report.browserExecutable = executablePath || chromium.executablePath();
     browser = await chromium.launch({ headless: true, executablePath });
     const context = await browser.newContext({
+      locale: 'zh-CN',
       viewport: { width: 1440, height: 1100 },
       reducedMotion: 'reduce',
     });
@@ -509,7 +510,7 @@ test(
         await search.fill('');
         const opened = context.waitForEvent('response', {
           predicate: (response) =>
-            response.url() === `${base}/open/${sprout.id}`,
+            response.url() === `${base}/open/${sprout.id}?lang=zh-CN`,
         });
         const popupReady = page.waitForEvent('popup');
         await card(sprout)

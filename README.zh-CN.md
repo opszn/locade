@@ -8,7 +8,7 @@
 
 **v0.3.0-alpha.1 · macOS 优先 · 本地存储 · MIT。** 当前建议使用源码 Web 版；不是部署平台，也不是项目进程管理器。菜单栏源码与打包工具已具备，但原生安装验收未完成，暂不提供正式 App / DMG 下载，也没有可用的 `npx locade` 命令。
 
-当前应用界面与详细文档主要为简体中文；英文 README 是项目介绍与使用入口，不代表已完成界面国际化。
+已发布 Alpha.1 的应用界面与详细文档主要为简体中文。Alpha.2 开发正在加入 Web 中英文切换与首次使用引导，见 [计划与实现状态](docs/ALPHA2_PLAN.md)；这些开发变更不代表已发布新版本或原生验收通过。
 
 [GitHub 仓库](https://github.com/opszn/locade) · [源码 Alpha 预发布](https://github.com/opszn/locade/releases/tag/v0.3.0-alpha.1)
 

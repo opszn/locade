@@ -11,6 +11,7 @@ const publicFiles = new Set([
   'CONTRIBUTING.md',
   'LICENSE',
   'README.md',
+  'README.zh-CN.md',
   'SECURITY.md',
   'index.html',
   'package.json',

@@ -13,8 +13,10 @@ manager. The menu-bar source and packaging tools exist, but native installation
 has not passed acceptance. There is no official App / DMG download or published
 `npx locade` command.
 
-The application interface and most detailed documentation are currently in
-Simplified Chinese. This English guide does not imply an English-localized UI.
+The published Alpha.1 application interface and most detailed documentation are in
+Simplified Chinese. Development toward Alpha.2 adds a Chinese / English web UI
+and first-use guidance; see the [plan and implementation status](docs/ALPHA2_PLAN.md).
+These development changes are not a new release or native app acceptance.
 
 [GitHub repository](https://github.com/opszn/locade) ·
 [Source Alpha release](https://github.com/opszn/locade/releases/tag/v0.3.0-alpha.1)

@@ -24,6 +24,8 @@ import {
 } from './project-actions.js';
 import { sendNavigationError } from './navigation-error.js';
 import { APP_VERSION } from './version.js';
+import { normalizeLanguage, translateMessage } from './i18n.js';
+import { screenshotCapability } from './capabilities.js';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const types = {
@@ -55,6 +57,11 @@ async function body(request) {
 }
 
 function send(response, status, value) {
+  if (value?.error)
+    value = {
+      ...value,
+      error: translateMessage(value.error, response.locadeLocale),
+    };
   response.writeHead(status, {
     'Content-Type': 'application/json; charset=utf-8',
     'Cache-Control': 'no-store',
@@ -68,6 +75,7 @@ export async function createApp({
   capturePage = capture,
   inspectProject = inspectUrl,
   openProjectDirectory = openDirectory,
+  screenshotStatus = screenshotCapability,
 } = {}) {
   const release = await acquireInstance(dataDir);
   const store = new Store(dataDir);
@@ -137,6 +145,8 @@ export async function createApp({
     return scanPending;
   };
   const server = http.createServer(async (request, response) => {
+    response.locadeLocale =
+      normalizeLanguage(request.headers['x-locade-language']) || 'zh-CN';
     response.setHeader('X-Content-Type-Options', 'nosniff');
     response.setHeader('X-Frame-Options', 'DENY');
     response.setHeader('Referrer-Policy', 'no-referrer');
@@ -192,6 +202,8 @@ export async function createApp({
           return send(response, 200, library());
         if (request.method === 'GET' && pathname === '/api/storage')
           return send(response, 200, await store.storageUsage());
+        if (request.method === 'GET' && pathname === '/api/capabilities')
+          return send(response, 200, { screenshots: await screenshotStatus() });
         if (!['POST', 'PATCH', 'DELETE'].includes(request.method))
           return send(response, 404, { error: '接口不存在' });
         const supplied = Buffer.from(request.headers['x-locade-token'] || '');
@@ -426,6 +438,13 @@ export async function createApp({
         return sendNavigationError(
           response,
           error.message || '当前项目无法打开，请重新发现。',
+          normalizeLanguage(
+            new URL(request.url, 'http://localhost').searchParams.get('lang'),
+          ) ||
+            normalizeLanguage(
+              request.headers['accept-language']?.split(',')[0]?.split(';')[0],
+            ) ||
+            'zh-CN',
         );
       if (error.code === 'ENOENT')
         return send(response, request.url.startsWith('/api/') ? 400 : 404, {

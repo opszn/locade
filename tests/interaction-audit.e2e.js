@@ -80,6 +80,7 @@ async function setup(t) {
   const base = await listen(app.server);
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage({
+    locale: 'zh-CN',
     viewport: { width: 1440, height: 1000 },
     reducedMotion: 'reduce',
   });

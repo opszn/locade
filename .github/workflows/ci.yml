@@ -1,0 +1,53 @@
+name: Source Checks
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: source-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  source:
+    name: macOS / Node ${{ matrix.node }} / ${{ matrix.source }}
+    runs-on: macos-15
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - node: '24'
+            source: npm
+            registry: https://registry.npmjs.org
+          - node: '26'
+            source: npm
+            registry: https://registry.npmjs.org
+          - node: '24'
+            source: npmmirror
+            registry: https://registry.npmmirror.com
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: ${{ matrix.node }}
+      - name: Install locked dependencies
+        run: npm ci --registry="${{ matrix.registry }}" --no-audit --no-fund
+      - name: Check public source and formatting
+        run: |
+          npm run check:source
+          npm run format:check
+      - name: Core tests
+        run: npm test
+      - name: Install matching browser from Playwright
+        run: npm exec --no -- playwright install chromium
+      - name: Browser tests
+        run: npm run test:ui
+      - name: Real macOS discovery
+        run: npm run test:discovery

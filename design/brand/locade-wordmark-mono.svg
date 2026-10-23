@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 466 132" role="img" aria-label="Locade, monochrome">
+<title>Locade, monochrome</title><g fill="none" stroke="#252722" stroke-width="13" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M18 21V87Q18 105 36 105H40"/>
+  <path d="M201 57C177 37 150 49 150 77S177 117 201 97"/>
+  <circle cx="251" cy="77" r="28"/><path d="M279 49V105"/>
+  <circle cx="333" cy="77" r="28"/><path d="M361 21V105"/>
+  <path d="M443 96C432 110 411 111 398 99C380 82 389 49 414 49C433 49 446 62 446 77H390"/>
+</g><path fill="#252722" fill-rule="evenodd" d="M62 77a34 34 0 1 0 68 0a34 34 0 1 0 -68 0 M75.0 73.0a21.0 21.0 0 1 0 42.0 0a21.0 21.0 0 1 0 -42.0 0"/></svg>

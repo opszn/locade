@@ -42,6 +42,34 @@ test('source release metadata, runtime version, bundle version and lock root agr
   assert.match(license, /Copyright \(c\) 2026 Locade contributors/);
 });
 
+test('English and Chinese READMEs link to each other and keep executable examples in sync', async () => {
+  const english = await readFile(
+    new URL('../README.md', import.meta.url),
+    'utf8',
+  );
+  const chinese = await readFile(
+    new URL('../README.zh-CN.md', import.meta.url),
+    'utf8',
+  );
+  assert.match(english, /\[简体中文\]\(README\.zh-CN\.md\)/);
+  assert.match(chinese, /\[English\]\(README\.md\)/);
+  const commands = (text) =>
+    [...text.matchAll(/```sh\n([\s\S]*?)```/g)].map((match) =>
+      match[1]
+        .split('\n')
+        .map((line) => line.split('#')[0].trim())
+        .filter(Boolean),
+    );
+  assert.ok(commands(english).length > 0);
+  assert.deepEqual(commands(english), commands(chinese));
+  for (const text of [english, chinese]) {
+    assert.ok(text.includes(`v${APP_VERSION}`));
+    assert.match(text, /design\/screenshots\/library\.png/);
+    assert.match(text, /security\/advisories\/new/);
+  }
+  assert.match(english, /interface[\s\S]*Simplified Chinese/);
+});
+
 test('canonical lock uses public HTTPS tarballs with unchanged SHA512 verification', async () => {
   const lock = JSON.parse(
     await readFile(new URL('../package-lock.json', import.meta.url)),
@@ -103,11 +131,12 @@ test('public source selection excludes private evidence and includes reviewed do
   }
   await mkdir(path.join(root, '.github/workflows'), { recursive: true });
   await writeFile(path.join(root, '.github/workflows/ci.yml'), 'name: Checks');
+  await writeFile(path.join(root, 'README.zh-CN.md'), 'Chinese project entry');
   const first = await publicManifest(root);
   assert.deepEqual(first, await publicManifest(root));
   assert.deepEqual(
     first.files.map((entry) => entry.file),
-    ['.github/workflows/ci.yml', '.npmrc', 'src/main.jsx'],
+    ['.github/workflows/ci.yml', '.npmrc', 'README.zh-CN.md', 'src/main.jsx'],
   );
   await writeFile(path.join(root, 'src/main.jsx'), 'export default 1;');
   assert.notEqual((await publicManifest(root)).sha256, first.sha256);

@@ -1,32 +1,60 @@
 # Locade
 
+English | [简体中文](README.zh-CN.md)
+
 > Your localhost, ready to play.
 
-把散落在本机的开发项目，变成一个有真实截图、能再次找回的可视化作品库。
+A local-first visual library for your development projects. Recognize what you
+built from real screenshots, keep it in your collection, and find your way back.
 
-**v0.3.0-alpha.1 · macOS 优先 · 本地存储 · MIT。** 当前建议使用源码 Web 版；不是部署平台，也不是项目进程管理器。菜单栏源码与打包工具已具备，但原生安装验收未完成，暂不提供正式 App / DMG 下载，也没有可用的 `npx locade` 命令。
+**v0.3.0-alpha.1 · macOS-first · Local storage · MIT.** Use the source-based web
+app for now. Locade is neither a deployment platform nor a project process
+manager. The menu-bar source and packaging tools exist, but native installation
+has not passed acceptance. There is no official App / DMG download or published
+`npx locade` command.
 
-[GitHub 仓库](https://github.com/opszn/locade) · [源码 Alpha 预发布](https://github.com/opszn/locade/releases/tag/v0.3.0-alpha.1)
+The application interface and most detailed documentation are currently in
+Simplified Chinese. This English guide does not imply an English-localized UI.
 
-![Locade 源码 Web 项目库，使用隔离的受控测试项目](design/screenshots/library.png)
+[GitHub repository](https://github.com/opszn/locade) ·
+[Source Alpha release](https://github.com/opszn/locade/releases/tag/v0.3.0-alpha.1)
 
-图中是隔离测试网页与临时目录，不是用户真实项目、私人截图或内置演示数据。原始品牌草稿见 [品牌预览](design/brand/preview.png)。
+![Locade's web project library, showing isolated test projects](design/screenshots/library.png)
 
-## 能做什么
+The screenshot shows isolated test pages and temporary directories, not a user's
+private projects, screenshots, or built-in demo content. See the original
+[brand exploration](design/brand/preview.png).
 
-- 发现本机运行的 HTTP(S) 网页，用真实截图、名称、收藏、搜索和最近访问找回项目；离线后保留卡片与封面。
-- 关联进程工作目录、只读 Git 分支；支持手动绑定及显式打开 Finder、VS Code、Cursor。
-- 区分项目和地址：换端口尽量保留身份，识别到端口复用时阻止旧卡片误开或继承封面；证据不足时保守处理。
-- 比较同名记录的目录、地址和封面，明确选择后忽略，可撤销 / 恢复；不按标题自动合并或清除历史卡片。
-- 全局 / 单项目截图许可、删除、容量统计、本地备份与恢复；业务确认、校验和错误反馈由 Locade 自有界面承载。
+## What It Does
 
-目标形态是 **macOS 菜单栏入口 + 本地核心 + 浏览器完整项目库**。源码 Web 是目前可验证和试用的入口，不应把菜单栏编译通过当作原生体验验收通过。
+- Discover local HTTP(S) pages and find projects by screenshot, name, favorites,
+  search, or recent visits. Keep cards and covers when a project goes offline.
+- Associate projects with process working directories and read-only Git branch
+  information. Bind directories manually and explicitly open Finder, VS Code, or
+  Cursor.
+- Treat projects and addresses separately: retain identity across port changes
+  where evidence permits, and block stale cards from opening a reused address or
+  inheriting another project's cover. Handle uncertain identity conservatively.
+- Compare same-name records by directory, address, and cover. Ignore only the
+  records you explicitly select, with undo and restore; never merge or remove
+  historical cards just because their titles match.
+- Control screenshots globally and per project, delete covers, inspect storage,
+  and export or restore local backups. Locade owns its confirmation, validation,
+  and error UI rather than relying on browser dialogs.
 
-## 快速开始
+The intended product is a **macOS menu-bar entry point + local core + full project
+library in your browser**. The source-based web app is the current usable entry
+point. Compiling the menu bar is not the same as validating the native experience.
 
-需要 Node.js **22.13+**，推荐已验证的 Node 24；Node 26 也有回归覆盖。当前实测环境为 macOS Apple Silicon，其他平台 / 架构尚未保证。发现依赖系统 `lsof`，不可用时只回退探测常用端口。
+## Quick Start
 
-在项目目录中选择一种安装来源，**不需要更改全局 npm 配置**：
+Requires **Node.js 22.13+**. Node 24 is recommended; Node 26 is also covered by
+regression tests. The tested environment is macOS on Apple Silicon. Other
+platforms and architectures are not yet guaranteed. Discovery uses the system
+`lsof`; if unavailable, it falls back to probing common ports only.
+
+Clone the repository, then choose one dependency source. **No global npm
+configuration changes are needed.**
 
 ```sh
 git clone https://github.com/opszn/locade.git
@@ -34,73 +62,132 @@ cd locade
 ```
 
 ```sh
-# 默认：公共 npm 官方源
+# Default: the public npm registry
 npm ci
 
-# 或：公共国内镜像（npmmirror，第三方服务）
+# Or: the public npmmirror registry, a third-party option for users in China
 npm ci --registry=https://registry.npmmirror.com
 ```
 
-两种方式使用同一份 `package-lock.json`，不更换版本或完整性校验。无企业镜像 / 私有账户依赖，不自动切源；镜像不可用时可显式改回官方源。详见 [安装与来源说明](docs/INSTALLATION.md)。
+Both use the same `package-lock.json`, dependency versions, and integrity checks.
+Neither requires a corporate registry or private account. There is no automatic
+registry fallback; explicitly select the official registry if the mirror is
+unavailable. See [installation and download sources (Chinese)](docs/INSTALLATION.md).
 
 ```sh
 npm run build
 npm start
 ```
 
-打开终端显示的 `http://127.0.0.1:4400`。首次进入自动发现；默认每 20 秒在页面可见且没有编辑 / 弹窗时刷新，可在资料工具中关闭。在线状态表示最近探测结果，不是实时保证。
+Open the address printed in the terminal, normally `http://127.0.0.1:4400`.
+The first visit triggers discovery. By default, it refreshes every 20 seconds
+while the page is visible and no edit or dialog is active; you can disable this
+in the library tools. Online status reflects the most recent probe, not a live
+guarantee.
 
-截图前需要额外安装匹配的 Playwright Chromium：
+Install the matching Playwright Chromium before taking screenshots:
 
 ```sh
 npm exec --no -- playwright install chromium
 ```
 
-**npm 镜像不等于浏览器下载镜像**，Chromium 默认仍从 Playwright 配置的下载服务获取。没有浏览器时仍可发现、收藏和打开；截图默认关闭，授权后也必须逐项目触发，不自动批量截图。
+**An npm mirror does not change the browser download host.** Chromium still uses
+Playwright's configured download service. Without it, you can still discover,
+favorite, and open projects. Screenshots are disabled by default and require an
+explicit per-project action even after permission is enabled; no automatic bulk
+capture occurs.
 
-默认资料保存在 `~/.locade/`。改用隔离资料库或端口：
+Data is stored in `~/.locade/` by default. To use an isolated library or a different
+port:
 
 ```sh
 PORT=4401 LOCADE_DATA_DIR="$PWD/.locade" npm start
 ```
 
-同一资料库只允许一个新版实例；升级前关闭旧服务。`PORT=0` 可分配环回动态端口。
+Only one current-version instance can own a data directory. Close the previous
+service before upgrading. `PORT=0` requests a dynamically assigned loopback port.
 
-## 隐私与边界
+## Privacy and Boundaries
 
-- 管理服务仅绑定 `127.0.0.1`，校验 Host / Origin / Fetch Metadata 和会话变更令牌，不启用 CORS；不应通过代理公开到网络。
-- 不自动执行项目脚本，不停止外部服务，不上传截图，不添加遥测、云同步或公网隧道。
-- 仅有限读取进程 cwd、启动时间、目录标记和 Git HEAD，不全盘扫描、不执行 Git / hooks。monorepo、worktree 和同目录多服务不会只凭仓库根目录强行合并。
-- 发现发送真实 GET，只收录成功 HTML，不跟随重定向、不接受自签名 HTTPS、不复用登录态。遗漏可手动添加最终 HTML 地址。
-- 截图限制为环回资源，不复用日常登录态；远程 CDN / API、WebSocket 或需登录的页面可能不完整。这不是恶意网页沙箱。
-- 关闭全局截图会删除所有当前封面；关闭单项目许可会删除该项目封面。截图没有默认过期；已导出备份不随应用内删除而消失。
-- 无身份或瞬时竞争时仍可能有保守重复 / 阻止打开。同名不等于同项目；不要将保留旧卡片理解为无条件自动去重。
+- The management service binds only to `127.0.0.1`, validates Host / Origin /
+  Fetch Metadata and a session mutation token, and does not enable CORS. Do not
+  expose it to a network through a proxy.
+- No automatic project script execution, stopping external services, screenshot
+  uploads, telemetry, cloud sync, or public tunnels.
+- Only limited process cwd, start-time, directory-marker, and Git HEAD metadata
+  is read. There is no full-disk scan or execution of Git or hooks. Monorepos,
+  worktrees, and concurrent services in one directory are not merged solely by
+  repository root.
+- Discovery sends real GET requests and accepts successful HTML only. It does
+  not follow redirects, accept self-signed HTTPS, or reuse authenticated browser
+  sessions. Add the final HTML address manually if discovery misses it.
+- Screenshot resources are restricted to loopback; your everyday browser's login
+  state is not reused. Pages depending on remote CDNs / APIs, WebSockets, or login
+  may render incompletely. This is not a sandbox for malicious pages.
+- Disabling screenshots globally deletes all current covers; disabling them for
+  one project deletes that project's cover. Screenshots do not expire by default.
+  Deleting inside the app does not remove previously exported backups.
+- Weak identity evidence or transient races can still leave conservative
+  duplicates or block a stale address. Matching titles do not establish matching
+  projects; retaining old records is not a promise of automatic deduplication.
 
-## 开发与验证
+## Development and Verification
 
 ```sh
-npm run check:source      # 公共锁源、公开文件清单及有限敏感内容护栏
+npm run check:source      # Public registry lock, source manifest, limited sensitive-data checks
 npm run format:check
-npm test                 # 核心、API、网络、安全与发布护栏
-npm run test:ui           # 构建 + 真实 Chromium 浏览器流程
-npm run test:discovery    # macOS 真实 lsof / cwd / Git 身份验证
-npm run dev              # 构建 + 服务端 watch；前端改动后仍需重新 build
+npm test                 # Core, API, network, safety, and release guards
+npm run test:ui           # Build and real Chromium browser workflows
+npm run test:discovery    # Real macOS lsof / cwd / Git identity checks
+npm run dev              # Build and watch the server; rebuild after frontend changes
 ```
 
-测试使用隔离资料库、受控网页和自有进程。浏览器应用测试拒绝原生 alert / confirm / prompt；文件选择、下载和显式打开项目 / 编辑器仍使用正规系统集成。不要同时运行会自动发现的日用实例和根路径 HTML 测试，避免将测试页收录到真实库。
+Tests use isolated data directories, controlled pages, and owned processes.
+Application browser tests reject native alert / confirm / prompt dialogs. File
+selection, downloads, and explicitly opening a project or editor still use normal
+browser and OS integrations. Do not run an auto-discovering everyday Locade
+instance alongside root-path HTML fixtures, or it may collect test pages.
 
-真实 [GitHub CI 39892036075](https://github.com/opszn/locade/actions/runs/39892036075) 已在首次公开前通过：macOS、Node 24 / 26 官方源和 Node 24 国内镜像三组，各核心 **74/74**、浏览器 **10/10**、真实系统发现 **7/7**。远端 runner 也完成匹配 Chromium / headless shell 下载；这是源码 CI，不是原生 App 或全部干净目标机器验收。本地双 Node 回归同样通过，完整限制见 [验收记录](docs/ACCEPTANCE.md)；后续提交状态以 [Actions](https://github.com/opszn/locade/actions) 为准。
+Before the first public release,
+[GitHub CI run 39892036075](https://github.com/opszn/locade/actions/runs/39892036075)
+passed all three macOS configurations: Node 24 / 26 with npm, and Node 24 with
+npmmirror. Each passed **74/74 core tests, 10/10 browser tests, and 7/7 real system
+discovery checks**. Runners also downloaded matching Chromium / headless shell
+builds. These are source CI results, not native app acceptance or coverage of
+every clean target machine. Local regression on both Node versions also passed.
+See the [acceptance record (Chinese)](docs/ACCEPTANCE.md) for scope and limitations;
+use [Actions](https://github.com/opszn/locade/actions) for each subsequent commit's
+results.
 
-## 文档与状态
+## Documentation and Status
 
-[PRD](docs/PRD.md) · [安装说明](docs/INSTALLATION.md) · [质量风险](docs/QUALITY.md) · [交互验收](docs/INTERACTION_AUDIT.md) · [macOS 构建](docs/MACOS.md) · [发布清单](docs/RELEASE_STATUS.md) · [一周试用](docs/TRYOUT.md) · [历史性能](docs/PERFORMANCE.md) · [竞品初查](docs/COMPETITIVE_RESEARCH.md) · [项目交接](docs/PROJECT_CONTEXT.md)
+Detailed project notes are currently in Chinese:
 
-目录：`src/` 前端、`server/` 本地核心、`macos/` 原生壳、`tests/` 测试、`tools/` 构建和验收、`design/brand/` 原品牌草稿。
+[Product requirements](docs/PRD.md) · [Installation](docs/INSTALLATION.md) ·
+[Known risks](docs/QUALITY.md) · [Interaction acceptance](docs/INTERACTION_AUDIT.md) ·
+[macOS builds](docs/MACOS.md) · [Release status](docs/RELEASE_STATUS.md) ·
+[One-week tryout](docs/TRYOUT.md) · [Historical performance](docs/PERFORMANCE.md) ·
+[Competitor research](docs/COMPETITIVE_RESEARCH.md) · [Project handoff](docs/PROJECT_CONTEXT.md)
 
-## 许可与发布
+Directories: `src/` frontend, `server/` local core, `macos/` native shell, `tests/`
+tests, `tools/` build and verification tools, and `design/brand/` original brand
+exploration.
 
-本项目采用 [MIT 许可证](LICENSE)，第三方依赖仍遵循各自许可证。`private: true` 仅用于防止误发布到 npm，不影响本仓库的 MIT 授权；当前没有发布 npm 包。名称、npm 包名、域名与商标尚未完成核查。
+## License and Release Status
 
-GitHub 仓库 [opszn/locade](https://github.com/opszn/locade) 已在私有 CI 通过后公开。正式 App 分发、Developer ID / 公证、登录项 / 干净机器验收、完整 PRD 与一周真实使用验证仍未完成；既有本地 App / DMG 不代表最新源码，不作为本次 GitHub 附件。首发说明见 [Alpha 发布说明](docs/RELEASE_NOTES.md)。
+Locade uses the [MIT License](LICENSE). Third-party dependencies retain their own
+licenses. `private: true` only prevents accidental npm publication; it does not
+restrict this repository's MIT license. No npm package has been published. The
+name, npm package name, domain, and trademark have not been cleared.
 
-贡献前请读 [贡献说明](CONTRIBUTING.md)，安全问题请读 [安全说明](SECURITY.md)。
+[opszn/locade](https://github.com/opszn/locade) became public after its private CI
+passed. Official App distribution, Developer ID signing / notarization, login-item
+and clean-machine acceptance, the full PRD, and a real one-week usage study are
+still unfinished. Existing local App / DMG builds do not represent the latest
+source and are not attached to this release. See the
+[Alpha release notes (Chinese)](docs/RELEASE_NOTES.md).
+
+Read [Contributing (Chinese)](CONTRIBUTING.md) before contributing, and
+[Security (Chinese)](SECURITY.md) before reporting a security issue. Use
+[GitHub's private vulnerability reporting](https://github.com/opszn/locade/security/advisories/new)
+for sensitive reports; do not post private project data or credentials publicly.

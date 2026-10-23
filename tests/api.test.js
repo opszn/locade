@@ -1,6 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp, rm, writeFile, access, readFile } from 'node:fs/promises';
+import {
+  mkdtemp,
+  rm,
+  writeFile,
+  access,
+  readFile,
+  readdir,
+} from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
 import http from 'node:http';
@@ -93,20 +100,22 @@ test('API lifecycle: discovery, favorites, capture consent/deletion, manual URLs
   await api('settings', 'PATCH', { screenshotsEnabled: true });
   result = await api(`projects/${id}/screenshot`, 'POST');
   assert.ok(result.data.projects[0].screenshot);
+  const originalCover = store.screenshotPath(store.state.projects[0]);
   assert.equal((await fetch(`${base}/screenshots/${id}.png`)).status, 200);
   captureFails = true;
   assert.equal((await api(`projects/${id}/screenshot`, 'POST')).status, 400);
-  assert.equal(
-    await readFile(path.join(store.screenshots, `${id}.png`), 'utf8'),
-    'test image',
-  );
-  await assert.rejects(access(path.join(store.screenshots, `${id}.png.tmp`)));
+  assert.equal(await readFile(originalCover, 'utf8'), 'test image');
+  assert.deepEqual(await readdir(store.screenshots), [
+    path.basename(originalCover),
+  ]);
   captureFails = false;
   await api(`projects/${id}/screenshot`, 'DELETE');
   assert.equal((await fetch(`${base}/screenshots/${id}.png`)).status, 404);
   await api(`projects/${id}/screenshot`, 'POST');
+  const replacementCover = store.screenshotPath(store.state.projects[0]);
   await api('settings', 'PATCH', { screenshotsEnabled: false });
-  await assert.rejects(access(path.join(store.screenshots, `${id}.png`)));
+  await assert.rejects(access(replacementCover));
+  assert.deepEqual(await readdir(store.screenshots), []);
   result = await api(`projects/${id}/opened`, 'POST');
   assert.ok(result.data.projects[0].lastOpened);
   result = await api('projects', 'POST', { url: `${local.url}/notes` });

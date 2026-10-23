@@ -18,6 +18,13 @@ Simplified Chinese. Development toward Alpha.2 adds a Chinese / English web UI
 and first-use guidance; see the [plan and implementation status](docs/ALPHA2_PLAN.md).
 These development changes are not a new release or native app acceptance.
 
+Alpha.2 development also hardens data and screenshot commits. Its local library
+format is v3; legacy covers keep their filenames, and an original metadata copy
+is kept before migration. Older source must not write to this upgraded directory.
+Exported backups still contain compatible v2 data; restore them into a separate
+empty directory when returning to older code. See [failure recovery and limits
+(Chinese)](docs/DATA_INTEGRITY.md).
+
 [GitHub repository](https://github.com/opszn/locade) ·
 [Source Alpha release](https://github.com/opszn/locade/releases/tag/v0.3.0-alpha.1)
 

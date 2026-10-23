@@ -10,7 +10,7 @@
 
 本轮用户同意两种外部安装来源：**默认公共 npm 官方源，显式可选公共国内镜像**。已经将锁文件的企业镜像改为标准 npmjs URL，版本 / integrity 不变；项目 `.npmrc` 支持命令行选择 npmmirror，不改全局配置、不自动切源。两源干净安装、锁文件不变和安装文件逐字节一致已验证，说明见 `INSTALLATION.md`。三组本地回归（官方 Node 24 / 26、镜像 Node 24）各核心 73 / 浏览器 10 / 系统发现 7 全通过，构建相同；audit 当前 0 条已知漏洞。浏览器回归复用现有匹配 Chromium，另尝试的空缓存官方下载约 20% 因缓慢主动中止，不宣称干净下载通过。
 
-用户已于 2026-10-23 同意 MIT + 个人仓库 + 源码 Alpha 的发布方案，并完成 GitHub CLI 官方浏览器授权。身份经 API 核验为个人账号 opszn，已新建私有仓库 https://github.com/opszn/locade （未覆盖既有仓库）。本地已添加 MIT（署名 Locade contributors），版本统一为 0.3.0-alpha.1，运行时 / 健康接口 / 锁文件 / 构建工具使用同一版本来源；保留 private: true 防止误发布 npm。新增版本一致性护栏后，本地核心双 Node 74/74、浏览器 10/10、系统发现双 7/7 通过。92 文件已按公开清单逐字节暂存核对，Gitleaks 源码和首次 Git 历史无发现；首次提交 58352add550122a2328ae22957dc9b83e8543056 已在私有仓库通过远端三组 CI，各核心 74 / 浏览器 10 / 系统发现 7，runner 实际完成 Chromium 下载。随后仓库转公开、GitHub 确认 MIT，私密漏洞报告启用并查询 enabled=true。当前收尾公开文档和 Alpha Release，后续提交须等其独立 CI；实际状态见 RELEASE_STATUS.md，不提前宣称 Release 已发布。
+用户已于 2026-10-23 同意 MIT + 个人仓库 + 源码 Alpha 的发布方案，并完成 GitHub CLI 官方浏览器授权。身份经 API 核验为个人账号 opszn，已新建私有仓库 https://github.com/opszn/locade （未覆盖既有仓库）。本地已添加 MIT（署名 Locade contributors），版本统一为 0.3.0-alpha.1，运行时 / 健康接口 / 锁文件 / 构建工具使用同一版本来源；保留 private: true 防止误发布 npm。新增版本一致性护栏后，本地核心双 Node 74/74、浏览器 10/10、系统发现双 7/7 通过。92 文件已按公开清单逐字节暂存核对，Gitleaks 源码和首次 Git 历史无发现；首次提交 58352add550122a2328ae22957dc9b83e8543056 已在私有仓库通过远端三组 CI，各核心 74 / 浏览器 10 / 系统发现 7，runner 实际完成 Chromium 下载。随后仓库转公开、GitHub 确认 MIT，私密漏洞报告启用并查询 enabled=true。源码 Alpha 已发布：https://github.com/opszn/locade/releases/tag/v0.3.0-alpha.1 ，prerelease=true / draft=false / 无上传附件；tag 指向 ca37a1afc943cce7a906f7c6169e934046b6c0bf，其独立 CI 39899446370 三组成功。公开 / 源码预发布完成不等于完整 PRD 或原生发行完成；发布后的文档提交须等待自己的 CI，不移动 tag。
 
 ## 用户确认与授权
 
@@ -65,3 +65,5 @@
 GitHub CLI 授权由用户在官方设备页完成；不读取 Chrome cookies、密码或登录数据库，不将令牌写入源码。Git 提交使用账号名与 GitHub noreply 邮箱，不公开本机全局 Git 邮箱。MIT 是本轮明确授权，不改变第三方依赖许可。README 新图为最新隔离五项目 Chromium 回归的受控截图，已目视检查 / 无 PNG 文本元数据，不是用户私人封面；只有精确的截图路径加入公开白名单。
 
 原生工具仅同步未来构建的版本 / MIT 打包说明，不执行构建、不覆盖任何既有原生文件。当前服务起始时未运行，没有向历史终端 / PID 发信号。测试始终使用临时资料，私有保留基线和授权后发布证据位于 test-results/github-alpha-20261023/，不提交。GitHub 私密漏洞报告在私有阶段查询为 404；公开后已启用且 enabled=true，SECURITY.md 提供正式入口，不创建测试漏洞或承诺 SLA。
+
+发布后以原路径源码启动恢复本机 Web；健康接口 / library / package 的 Alpha 版本一致。原真实卡片用户字段 / 设置、全部 PNG SHA256 和旧 App / DMG / 固定副本身份保持本轮基线，私有报告存于 github-alpha-20261023；不将公开 Git 初始化引发的只读源码变更当原生重建。后续先收真实使用反馈 / 问题复现，不重复发布已有 tag，不在没有外部条件变化时重试受阻原生。

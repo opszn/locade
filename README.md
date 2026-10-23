@@ -6,6 +6,8 @@
 
 **v0.3.0-alpha.1 · macOS 优先 · 本地存储 · MIT。** 当前建议使用源码 Web 版；不是部署平台，也不是项目进程管理器。菜单栏源码与打包工具已具备，但原生安装验收未完成，暂不提供正式 App / DMG 下载，也没有可用的 `npx locade` 命令。
 
+[GitHub 仓库](https://github.com/opszn/locade) · [源码 Alpha 预发布](https://github.com/opszn/locade/releases/tag/v0.3.0-alpha.1)
+
 ![Locade 源码 Web 项目库，使用隔离的受控测试项目](design/screenshots/library.png)
 
 图中是隔离测试网页与临时目录，不是用户真实项目、私人截图或内置演示数据。原始品牌草稿见 [品牌预览](design/brand/preview.png)。

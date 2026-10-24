@@ -241,7 +241,10 @@ test('capture requires rediscovery when the saved listener changes even if the n
     before,
   );
   assert.equal(
-    await readFile(path.join(store.screenshots, `${id}.png`), 'utf8'),
+    await readFile(
+      store.screenshotPath(store.state.projects.find((p) => p.id === id)),
+      'utf8',
+    ),
     'controlled image 1',
   );
 });

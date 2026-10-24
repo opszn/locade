@@ -845,6 +845,18 @@ kbd {
   padding: 0;
   align-self: start;
 }
+.notice.storage-warning {
+  flex-direction: column;
+  gap: 8px;
+  overflow-wrap: anywhere;
+}
+.storage-warning p {
+  margin: 0;
+  color: inherit;
+}
+.storage-warning .button {
+  padding: 8px 12px;
+}
 dialog {
   width: min(480px, calc(100% - 32px));
   padding: 28px;
@@ -1883,6 +1895,17 @@ dialog {
   }
   .topbar-tools {
     margin-left: auto;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .topbar > div {
+    flex-shrink: 0;
+    max-width: 100%;
+  }
+  .settings-link {
+    position: static;
+    margin: 10px 0;
   }
   .language-picker > span {
     display: none;
@@ -1905,10 +1928,6 @@ dialog {
   :lang(en) .nav-item {
     font-size: 10px;
     white-space: normal;
-  }
-  :lang(en) .settings-link {
-    position: static;
-    margin: 10px 0;
   }
   :lang(en) .filterbar {
     flex-wrap: wrap;

@@ -10,6 +10,8 @@
 
 已发布 Alpha.1 的应用界面与详细文档主要为简体中文。Alpha.2 开发正在加入 Web 中英文切换与首次使用引导，见 [计划与实现状态](docs/ALPHA2_PLAN.md)；这些开发变更不代表已发布新版本或原生验收通过。
 
+Alpha.2 开发还补强了资料与截图提交。本地资料格式升为 v3，旧封面不改名，迁移前保留原元数据副本；不要让旧源码直接写入升级后的目录。导出备份仍包含兼容的 v2 资料，需要回到旧代码时应恢复到独立的空目录，见 [故障恢复与边界](docs/DATA_INTEGRITY.md)。
+
 [GitHub 仓库](https://github.com/opszn/locade) · [源码 Alpha 预发布](https://github.com/opszn/locade/releases/tag/v0.3.0-alpha.1)
 
 ![Locade 源码 Web 项目库，使用隔离的受控测试项目](design/screenshots/library.png)

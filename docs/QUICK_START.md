@@ -10,6 +10,8 @@ Use macOS on Apple Silicon and Node.js **22.13+**; Node 24 is recommended and No
 
 For a reproducible Alpha.1 checkout in a new folder:
 
+**If you have already used Alpha.2 development, do not run this older checkout against its v3 library.** Use a separate empty data directory as shown below; read the migration / backup guidance before returning to old source. A new source folder alone does not isolate the default `~/.locade/` data.
+
 ```sh
 git clone --branch v0.3.0-alpha.1 --depth 1 https://github.com/opszn/locade.git
 cd locade

@@ -10,6 +10,7 @@ import {
   rm,
   writeFile,
   stat,
+  link,
 } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
@@ -68,6 +69,10 @@ const childSource = `
       const result = await fs.writeFile(file,data,options);
       if(armed && phase==='after-image' && path.dirname(file)===store.screenshots) await pause();
       return result;
+    },
+    link: async (from,to) => {
+      await fs.link(from,to);
+      if(action==='migrate') await pause();
     },
   }});
   await store.init();
@@ -313,3 +318,138 @@ test('partial migration backup failure is not accepted as a completed migration 
   assert.equal(await readFile(store.file, 'utf8'), bytes);
   assert.deepEqual(await readFile(legacyFile), png);
 });
+
+async function legacyFixture(t) {
+  const directory = await mkdtemp(
+    path.join(os.tmpdir(), 'locade-migration-retry-'),
+  );
+  t.after(() => rm(directory, { recursive: true, force: true }));
+  await mkdir(path.join(directory, 'screenshots'));
+  const state = {
+    version: 2,
+    screenshotsEnabled: true,
+    projects: [
+      {
+        id: randomUUID(),
+        name: 'Preserved migration fixture',
+        url: 'http://127.0.0.1:3000/',
+        favorite: true,
+        screenshot: '2026-10-24T00:00:00.000Z',
+        captureAllowed: true,
+      },
+    ],
+  };
+  const file = path.join(directory, 'library.json');
+  const backup = path.join(directory, 'library.v2.backup.json');
+  const temporary = `${backup}.tmp`;
+  const image = path.join(
+    directory,
+    'screenshots',
+    `${state.projects[0].id}.png`,
+  );
+  const original = JSON.stringify(state);
+  await writeFile(file, original, { mode: 0o600 });
+  await writeFile(image, png, { mode: 0o600 });
+  return { directory, state, file, backup, temporary, image, original };
+}
+
+test('migration retry never writes through a leftover hard link to an already published recovery copy', async (t) => {
+  const s = await legacyFixture(t);
+  await writeFile(s.backup, s.original, { mode: 0o600 });
+  await link(s.backup, s.temporary);
+  const changed = structuredClone(s.state);
+  changed.projects[0].name = 'Later legacy edit stays in the live library';
+  await writeFile(s.file, JSON.stringify(changed));
+  let writes = 0;
+  const store = new Store(s.directory, {
+    io: {
+      writeFile: async (file, data, options) => {
+        if (file === s.temporary) {
+          writes++;
+          await writeFile(file, '{partial');
+          throw Object.assign(new Error('injected migration retry EIO'), {
+            code: 'EIO',
+          });
+        }
+        return writeFile(file, data, options);
+      },
+    },
+  });
+  await store.init();
+  assert.equal(
+    writes,
+    0,
+    'an existing valid copy needs validation, not rewriting',
+  );
+  assert.equal(await readFile(s.backup, 'utf8'), s.original);
+  assert.equal(store.state.projects[0].name, changed.projects[0].name);
+  assert.equal((await stat(s.backup)).nlink, 1);
+  await assert.rejects(stat(s.temporary), { code: 'ENOENT' });
+  assert.deepEqual(await readFile(s.image), png);
+});
+
+test('a stale migration temp hard link is detached before a failed new copy can modify another file', async (t) => {
+  const s = await legacyFixture(t);
+  const other = path.join(s.directory, 'owned-unrelated-fixture.json');
+  await writeFile(other, 'unrelated synthetic data');
+  await link(other, s.temporary);
+  const store = new Store(s.directory, {
+    io: {
+      writeFile: async (file, data, options) => {
+        if (file === s.temporary) {
+          await writeFile(file, '{partial');
+          throw Object.assign(new Error('injected fresh migration ENOSPC'), {
+            code: 'ENOSPC',
+          });
+        }
+        return writeFile(file, data, options);
+      },
+    },
+  });
+  await assert.rejects(store.init(), { code: 'ENOSPC' });
+  assert.equal(await readFile(other, 'utf8'), 'unrelated synthetic data');
+  assert.equal(await readFile(s.file, 'utf8'), s.original);
+  assert.deepEqual(await readFile(s.image), png);
+  await assert.rejects(stat(s.backup), { code: 'ENOENT' });
+  await assert.rejects(stat(s.temporary), { code: 'ENOENT' });
+});
+
+test('a damaged published migration copy is never silently repaired through a stale hard link', async (t) => {
+  const s = await legacyFixture(t);
+  const damaged = '{interrupted historical copy';
+  await writeFile(s.backup, damaged);
+  await link(s.backup, s.temporary);
+  await assert.rejects(new Store(s.directory).init());
+  assert.equal(await readFile(s.backup, 'utf8'), damaged);
+  assert.equal(await readFile(s.file, 'utf8'), s.original);
+  assert.deepEqual(await readFile(s.image), png);
+});
+
+test(
+  'actual migration interruption after publishing the recovery copy resumes without rewriting it',
+  { timeout: 15000 },
+  async (t) => {
+    const s = await legacyFixture(t);
+    await interruptAt(t, { directory: s.directory }, 'migrate', 'after-link');
+    assert.equal((await stat(s.backup)).ino, (await stat(s.temporary)).ino);
+    assert.equal((await stat(s.backup)).nlink, 2);
+    const store = new Store(s.directory, {
+      io: {
+        writeFile: async (file, data, options) => {
+          assert.notEqual(
+            file,
+            s.temporary,
+            'never truncate the already published recovery inode',
+          );
+          return writeFile(file, data, options);
+        },
+      },
+    });
+    await store.init();
+    assert.equal(store.state.version, LIBRARY_VERSION);
+    assert.equal(store.state.projects[0].id, s.state.projects[0].id);
+    assert.equal(await readFile(s.backup, 'utf8'), s.original);
+    assert.deepEqual(await readFile(s.image), png);
+    await assert.rejects(stat(s.temporary), { code: 'ENOENT' });
+  },
+);

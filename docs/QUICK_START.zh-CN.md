@@ -10,6 +10,8 @@
 
 在新目录获取固定的 Alpha.1 源码：
 
+**如果已用过 Alpha.2 开发版，不要让这个旧源码使用已升级的 v3 库。** 请按下方方式选独立的空资料目录，回旧代码前先读迁移 / 备份说明；只新建源码目录不会隔离默认的 `~/.locade/` 资料。
+
 ```sh
 git clone --branch v0.3.0-alpha.1 --depth 1 https://github.com/opszn/locade.git
 cd locade

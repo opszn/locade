@@ -187,9 +187,32 @@ export class Store {
   async migrationBackup(original, version) {
     const backup = path.join(this.directory, `library.v${version}.backup.json`);
     const temporary = `${backup}.tmp`;
-    let failure;
+    const validateCopy = (text) => {
+      if (validateLibrary(JSON.parse(text)).version !== version)
+        throw new Error('迁移副本格式无效，请先保留资料目录并检查');
+    };
+    let existing;
     try {
+      existing = await this.io.readFile(backup, 'utf8');
+    } catch (error) {
+      if (error.code !== 'ENOENT') throw error;
+    }
+    if (existing !== undefined) {
+      validateCopy(existing);
+      await this.io.rm(temporary, { force: true });
+      return;
+    }
+    // A killed publisher may leave temp and recovery names on the same inode.
+    // Detach the old name and reserve a fresh file before writing any bytes.
+    await this.io.rm(temporary, { force: true });
+    let failure;
+    let owned = false;
+    try {
+      const handle = await this.io.open(temporary, 'wx', 0o600);
+      owned = true;
+      await handle.close();
       await this.io.writeFile(temporary, original, {
+        flag: 'r+',
         mode: 0o600,
         flush: true,
       });
@@ -199,18 +222,14 @@ export class Store {
         await this.io.link(temporary, backup);
       } catch (error) {
         if (error.code !== 'EEXIST') throw error;
-        const existing = validateLibrary(
-          JSON.parse(await this.io.readFile(backup, 'utf8')),
-        );
-        if (existing.version !== version)
-          throw new Error('迁移副本格式无效，请先保留资料目录并检查');
+        validateCopy(await this.io.readFile(backup, 'utf8'));
       }
     } catch (error) {
       failure = error;
       throw error;
     } finally {
       try {
-        await this.io.rm(temporary, { force: true });
+        if (owned) await this.io.rm(temporary, { force: true });
       } catch (error) {
         if (!failure) throw error;
       }

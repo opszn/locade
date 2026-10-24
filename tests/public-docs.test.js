@@ -67,6 +67,13 @@ test('quick start pins the published source and separates optional browser insta
   assert.match(english, /without Chromium.*discover, favorite, and open/i);
   assert.match(english, /separate empty data directory/);
   assert.match(chinese, /独立的空资料目录/);
+  for (const [text, warning] of [
+    [english, 'If you have already used Alpha.2'],
+    [chinese, '如果已用过 Alpha.2'],
+  ]) {
+    const position = text.indexOf(warning);
+    assert.ok(position >= 0 && position < text.indexOf('```sh'));
+  }
 });
 
 test('English quick-start labels resolve to the implemented UI without translating user content', async () => {
@@ -207,6 +214,10 @@ test('public entry points link to quick start, bilingual release notes and priva
       'docs/RELEASE_NOTES',
     ])
       assert.ok(text.includes(target), `${file}: ${target}`);
+    assert.match(
+      text,
+      file === 'README.md' ? /incomplete disk\s+cleanup/ : /清理未完成/,
+    );
   }
   for (const file of ['CONTRIBUTING.md', 'SECURITY.md'])
     assert.match(await read(file), /docs\/FEEDBACK\.md/);

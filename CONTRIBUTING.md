@@ -36,3 +36,9 @@ npm run test:discovery
 不提交 `.locade/`、`test-results/`、`.build-cache/`、`node_modules/`、`dist/`、`release/`、环境文件、私钥、真实项目截图或完整个人路径。报告 bug 时用受控示例，注明 Node / macOS / 操作步骤和实际结果，不贴会话令牌、资料库、备份或敏感日志。
 
 GitHub CI 已实际执行并通过，具体提交结果见 [Actions](https://github.com/opszn/locade/actions)。每个后续改动须等待自己的 CI，不能沿用历史成功。工作流不发布包、不构建 / 安装原生、不访问签名凭据或注册登录项。
+
+## 公开问题反馈
+
+参照 [反馈与隐私](docs/FEEDBACK.md)，可用中英文报告普通问题或首次使用困惑。版本请注明 tag 或分支 + 短提交号，不以尚未改变的包版本冒称已发布 Alpha.2；用匿名小页面复现，记录预期 / 实际与未尝试项。不要求真实目录、封面、资料库、备份或完整日志。
+
+本分支的两个 Markdown 模板与选择器需合入默认分支后生效，不因写好文件就计作 GitHub UI 已验收。勾选项不强制、防泄露提醒不自动脱敏；安全问题使用 [私密漏洞报告](https://github.com/opszn/locade/security/advisories/new)。写好模板不等于陌生开发者或真人一周试用通过。

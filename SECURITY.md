@@ -29,3 +29,9 @@
 不要将可利用细节、真实路径、截图、令牌或密钥发到公开 issue。若已意外泄露凭据，先在凭据所属服务吊销 / 轮换，再处理仓库历史；仅删除当前文件并不能撤销已经公开的秘密。
 
 已知限制见 `docs/QUALITY.md`；无全面 I/O 故障、所有竞争时序、所有系统版本或恶意页面沙箱验收的结论。
+
+## Feedback In English / 双语反馈
+
+For a vulnerability or private data exposure, use [private vulnerability reporting](https://github.com/opszn/locade/security/advisories/new), not a public issue. Never attach private libraries, screenshots, backups, personal paths, session tokens or credentials. No response SLA is promised. If a credential was exposed, revoke / rotate it at its original service; editing an issue does not undo disclosure.
+
+Ordinary bugs and first-use friction may be reported in English or Chinese following [feedback and privacy / 反馈与隐私](docs/FEEDBACK.md). Templates do not automatically redact data. 本分支模板不代替人工脱敏，也不扩展普通问题的私密客服承诺；敏感细节仍走私密安全入口。

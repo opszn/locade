@@ -1,6 +1,10 @@
 # v0.3.0-alpha.1 · 源码 Alpha
 
+[English](RELEASE_NOTES.en.md) | 简体中文
+
 日期：2026-10-23（Asia/Shanghai）。这是 Locade 的首个源码预发布，不是正式 macOS App，不表示整个 PRD 已验收。采用 MIT 许可证，不发布 npm 包，不附加现有 App / DMG 或私有运行记录。
+
+本文件保留 Alpha.1 历史口径，开发增量另见 [Alpha.2 未发布草稿](ALPHA2_RELEASE_NOTES.md)，不是另一个发行版。
 
 ## 这次提供什么
 
@@ -15,7 +19,7 @@
 当前推荐 macOS Apple Silicon，Node.js 22.13+（推荐 Node 24）：
 
 ```sh
-git clone https://github.com/opszn/locade.git
+git clone --branch v0.3.0-alpha.1 --depth 1 https://github.com/opszn/locade.git
 cd locade
 npm ci
 # 国内用户也可选择：npm ci --registry=https://registry.npmmirror.com
@@ -24,6 +28,8 @@ npm start
 ```
 
 截图需额外 `npm exec --no -- playwright install chromium`，npm 镜像不改变浏览器下载来源。打开终端显示的环回地址，截图默认关闭，授权后逐项目触发；没有浏览器时仍可发现、收藏和打开。完整说明见 [安装文档](INSTALLATION.md)。
+
+另有 [快速使用](QUICK_START.zh-CN.md)。已发布 Alpha.1 界面为中文，双语界面 / 首次指南 / 资料提交补强属于未发布 Alpha.2 开发，不追溯写入这个 tag。
 
 ## 已验证与未验证
 
@@ -38,3 +44,5 @@ Swift 菜单栏源码与打包工具可供审阅，但历史候选不含最新�
 项目资料 / 截图留本机，不上传、不遥测；不自动执行项目脚本、不停止外部服务。默认 `~/.locade` 和导出备份可能含私人路径 / 图片，勿提交到 issue。
 
 README 图片来自受控测试项目，不是用户真实作品。安全问题先读 [安全说明](../SECURITY.md)，不要公开漏洞秘密或真实资料。
+
+普通问题见 [安全反馈指南](FEEDBACK.md)，敏感问题走 [私密漏洞报告](https://github.com/opszn/locade/security/advisories/new)。

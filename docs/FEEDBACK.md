@@ -1,12 +1,12 @@
 # Feedback / 问题反馈
 
-Updated / 更新：2026-10-24。English and Chinese reports are welcome / 欢迎中文或英文。
+Updated / 更新：2026-10-25。English and Chinese reports are welcome / 欢迎中文或英文。
 
 ## English
 
 ### Choose A Safe Channel
 
-- **Ordinary bug or usability problem:** use the repository's [new issue page](https://github.com/opszn/locade/issues/new/choose). The bug and first-use Markdown templates in this branch become available only after they merge into the **default branch**. Before that, copy the anonymous fields from this guide; do not assume the chooser is already deployed. This activation rule follows [GitHub's template documentation](https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/configuring-issue-templates-for-your-repository).
+- **Ordinary bug or usability problem:** use the repository's [new issue page](https://github.com/opszn/locade/issues/new/choose). Both Markdown templates have merged into the **default branch**, and GitHub's `issueTemplates` API recognizes them. Direct browser / HTTP access to the chooser timed out on the verification network, so this is server-side recognition, not visual acceptance. If the chooser cannot load for you, use the anonymous fields in this guide. The default-branch activation rule follows [GitHub's template documentation](https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/configuring-issue-templates-for-your-repository).
 - **Vulnerability, exposed secrets, or private data:** use [private vulnerability reporting](https://github.com/opszn/locade/security/advisories/new). Do not first post exploit details or real data in a public issue. Read the [security policy (Chinese)](../SECURITY.md); no response SLA or private support channel for ordinary bugs is promised.
 - **First-run feedback:** record only what you actually tried. Needed help, failure, stopping, and not trying a step are all useful results. Posting feedback does not enroll you in a study, authorize contacts, start a one-week timer, or enable telemetry.
 
@@ -38,7 +38,7 @@ If you already posted a credential, revoke or rotate it at its original service 
 
 ### 选择合适入口
 
-- **普通 bug 或使用困惑**：进入 [新建 issue](https://github.com/opszn/locade/issues/new/choose)。本分支提供问题 / 首次使用两个 Markdown 模板，只有合入**默认分支**后才在选择器生效；此前可参照本文匿名字段，不把源码存在当作已上线。[GitHub 模板说明](https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/configuring-issue-templates-for-your-repository)说明了此边界。
+- **普通 bug 或使用困惑**：进入 [新建 issue](https://github.com/opszn/locade/issues/new/choose)。两个 Markdown 模板已合入**默认分支**，GitHub 的 `issueTemplates` API 已识别。当前核验网络的浏览器 / HTTP 访问均超时，因此只确认服务端识别，不冒称选择器页面目视验收；若你也打不开，可参照本文匿名字段。[GitHub 模板说明](https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/configuring-issue-templates-for-your-repository)说明了默认分支生效的规则。
 - **漏洞、凭据或私人资料暴露**：走 [私密漏洞报告](https://github.com/opszn/locade/security/advisories/new)，不要先在公开 issue 披露利用细节或真实资料。另见 [安全说明](../SECURITY.md)；不承诺响应 SLA，也不虚构普通问题的私密客服入口。
 - **首次使用反馈**：仅记录实际尝试，失败、求助、中止、未尝试都有效。反馈不等于报名试用、不授权主动联系、不启动一周计时或遥测。
 

@@ -2,17 +2,17 @@
 
 English | [简体中文](ALPHA2_RELEASE_NOTES.md)
 
-Updated 2026-10-24. **Unreleased draft — no Alpha.2 release, tag, npm package or native download is created by this document.** The published source remains **v0.3.0-alpha.1**. Package metadata in development still uses that version; identify development behavior by branch + commit. These notes describe the source increments under review, not native app acceptance or the entire PRD being complete.
+Updated 2026-10-25. **Unreleased draft — no Alpha.2 release, tag, npm package or native download is created by this document.** The published source remains **v0.3.0-alpha.1**. Package metadata in development still uses that version; identify development behavior by branch + commit. These notes describe source merged into `main`, not native app acceptance or the entire PRD being complete.
 
-## Source Changes Under Review
+## Source Changes Merged Into `main`
 
 - [PR #6](https://github.com/opszn/locade/pull/6): Chinese / English web UI, explicit local language preference or browser language, dates, known errors, ten confirmation classes and navigation failure pages. User names / paths / branches are not translated; unknown external diagnostics stay verbatim. No menu-bar translation or execution is claimed.
 - The dismissible / reopenable first-use guide explains discovery and explicit screenshot consent, shows a read-only browser-file readiness check, a fixed manual install command and retry paths. It does not download, install, launch the checked browser, turn on consent or reuse browser login state. Initial service connection can be retried in the app.
 - [PR #7](https://github.com/opszn/locade/pull/7), stacked on #6: screenshot files have independent revisions; failed metadata commits keep original metadata / covers. Library / image / usage reads use a committed snapshot. Capture checks ownership before and after; uncertainty or reuse blocks replacement rather than inheriting the wrong image.
 - Successful metadata commit and incomplete image cleanup are reported separately. In-app Chinese / English warnings expose the filesystem error code and a cleanup retry, including after restart. Unreferenced images are not served; they may still exist on disk until cleanup succeeds. No hidden permanent old-image backup is introduced.
-- A2-05 adds paired quick-start / release notes, public bug / first-use Markdown templates and [privacy-safe feedback](FEEDBACK.md). Templates are not automatic redaction and are not available in GitHub's chooser until merged into the default branch. Preparing them does not count as a participant or real usage result.
+- A2-05 adds paired quick-start / release notes, public bug / first-use Markdown templates and [privacy-safe feedback](FEEDBACK.md). GitHub recognizes both templates on the default branch; direct chooser-page verification timed out on the verification network. Templates are not automatic redaction. Preparing them does not count as a participant or real usage result.
 
-These increments remain under review. Do not treat an open PR, local success or a version string as a published Alpha.2 build. [The plan (Chinese)](ALPHA2_PLAN.md) tracks review and remaining tasks.
+The complete fixed stack merged through #9 → #8 → #7 → #6, with current-head CI checked at every layer. It reached `main` at `76b884e`; the merged file tree matches the reviewed fix. Source integration is not a published Alpha.2 build. [The plan (Chinese)](ALPHA2_PLAN.md) tracks remaining validation.
 
 ## Data Migration And Returning To Older Source
 
@@ -27,7 +27,9 @@ These increments remain under review. Do not treat an open PR, local success or 
 
 The A2-04 source commit `882d1806d09d14a6162f7249697757f9908ae315` passed [its PR CI](https://github.com/opszn/locade/actions/runs/39986534011) across macOS Node 24 / 26 with npm and Node 24 with npmmirror: each **118/118 core, 17/17 browser and 7/7 real system discovery**. Local Node 24.22.0 / 26.7.0 matched. These are historical results for that code, not inherited success for this document or later commits; inspect each commit's [Actions](https://github.com/opszn/locade/actions).
 
-Fault coverage includes partial writes / rename / sync / cleanup failures, real owned-directory permission changes and eight owned Node-process interruption points around capture / restore / delete. ENOSPC / EIO were injected, not produced by filling a user's disk. Process SIGKILL is **not a power-loss durability guarantee**; filesystem / hardware failure and all timing races have not been exhausted. Checking ownership before / after also cannot prove every intermediate page identity.
+The integrated source `76b884eea2d0502b8311f883df459e532c18aded` passed [its main-branch CI](https://github.com/opszn/locade/actions/runs/40165626385): all three configurations each passed **130/130 core, 17/17 browser and 7/7 real system discovery**, with no failures or skips. Later documentation commits must pass their own checks.
+
+Fault coverage includes partial writes / rename / sync / cleanup failures, real owned-directory permission changes and nine owned Node-process interruption points around capture / restore / delete / migration. ENOSPC / EIO were injected, not produced by filling a user's disk. Process SIGKILL is **not a power-loss durability guarantee**; filesystem / hardware failure and all timing races have not been exhausted. Checking ownership before / after also cannot prove every intermediate page identity.
 
 ## Still Not Accepted Or Included
 
@@ -36,4 +38,4 @@ Fault coverage includes partial writes / rename / sync / cleanup failures, real 
 - Platforms beyond tested macOS Apple Silicon, all browsers, all process-discovery cases, and a malicious-page sandbox: not guaranteed.
 - No project start / stop manager, arbitrary shell, cloud sync, tunnels, screenshot upload or telemetry is added. Default discovery remains loopback, with the existing Host / Origin / session-token guards.
 
-Do not publish Alpha.2 merely because these notes exist. Review the increments and current CI, keep unverified items explicit, and use [feedback](FEEDBACK.md) or the [private security channel](https://github.com/opszn/locade/security/advisories/new) appropriately.
+Do not publish Alpha.2 merely because these notes exist or source was merged. Review the candidate's limits and current CI, keep unverified items explicit, and use [feedback](FEEDBACK.md) or the [private security channel](https://github.com/opszn/locade/security/advisories/new) appropriately.

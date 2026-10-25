@@ -10,6 +10,10 @@
 
 已发布 Alpha.1 的应用界面与详细文档主要为简体中文。Alpha.2 开发正在加入 Web 中英文切换与首次使用引导，见 [计划与实现状态](docs/ALPHA2_PLAN.md)；这些开发变更不代表已发布新版本或原生验收通过。
 
+[逐步快速使用](docs/QUICK_START.zh-CN.md) · [反馈与隐私](docs/FEEDBACK.md) · [Alpha.1 版本说明](docs/RELEASE_NOTES.md) · [Alpha.2 未发布草稿](docs/ALPHA2_RELEASE_NOTES.md)
+
+Alpha.2 开发还补强了资料与截图提交。本地资料格式升为 v3，旧封面不改名，迁移前保留原元数据副本；不要让旧源码直接写入升级后的目录。导出备份仍包含兼容的 v2 资料，需要回到旧代码时应恢复到独立的空目录，见 [故障恢复与边界](docs/DATA_INTEGRITY.md)。
+
 [GitHub 仓库](https://github.com/opszn/locade) · [源码 Alpha 预发布](https://github.com/opszn/locade/releases/tag/v0.3.0-alpha.1)
 
 ![Locade 源码 Web 项目库，使用隔离的受控测试项目](design/screenshots/library.png)
@@ -77,7 +81,7 @@ PORT=4401 LOCADE_DATA_DIR="$PWD/.locade" npm start
 - 仅有限读取进程 cwd、启动时间、目录标记和 Git HEAD，不全盘扫描、不执行 Git / hooks。monorepo、worktree 和同目录多服务不会只凭仓库根目录强行合并。
 - 发现发送真实 GET，只收录成功 HTML，不跟随重定向、不接受自签名 HTTPS、不复用登录态。遗漏可手动添加最终 HTML 地址。
 - 截图限制为环回资源，不复用日常登录态；远程 CDN / API、WebSocket 或需登录的页面可能不完整。这不是恶意网页沙箱。
-- 关闭全局截图会删除所有当前封面；关闭单项目许可会删除该项目封面。截图没有默认过期；已导出备份不随应用内删除而消失。
+- 关闭全局截图会请求删除所有当前封面，关闭单项目许可则请求删除该项目封面。Alpha.2 开发版若磁盘清理未完成，会明确警告并提供重试；完成前不要分享资料目录。截图没有默认过期，已导出备份不随应用内删除消失。
 - 无身份或瞬时竞争时仍可能有保守重复 / 阻止打开。同名不等于同项目；不要将保留旧卡片理解为无条件自动去重。
 
 ## 开发与验证
@@ -96,6 +100,8 @@ npm run dev              # 构建 + 服务端 watch；前端改动后仍需重�
 真实 [GitHub CI 39892036075](https://github.com/opszn/locade/actions/runs/39892036075) 已在首次公开前通过：macOS、Node 24 / 26 官方源和 Node 24 国内镜像三组，各核心 **74/74**、浏览器 **10/10**、真实系统发现 **7/7**。远端 runner 也完成匹配 Chromium / headless shell 下载；这是源码 CI，不是原生 App 或全部干净目标机器验收。本地双 Node 回归同样通过，完整限制见 [验收记录](docs/ACCEPTANCE.md)；后续提交状态以 [Actions](https://github.com/opszn/locade/actions) 为准。
 
 ## 文档与状态
+
+快速使用和版本说明已有中英文互链，详细工程笔记继续以中文维护。
 
 [PRD](docs/PRD.md) · [安装说明](docs/INSTALLATION.md) · [质量风险](docs/QUALITY.md) · [交互验收](docs/INTERACTION_AUDIT.md) · [macOS 构建](docs/MACOS.md) · [发布清单](docs/RELEASE_STATUS.md) · [一周试用](docs/TRYOUT.md) · [历史性能](docs/PERFORMANCE.md) · [竞品初查](docs/COMPETITIVE_RESEARCH.md) · [项目交接](docs/PROJECT_CONTEXT.md)
 

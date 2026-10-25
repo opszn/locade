@@ -7,6 +7,7 @@ export default function LibraryTools({
   disabled,
   action,
   getToken,
+  onRefresh,
   onRestore,
   reportError,
   onWorking,
@@ -54,7 +55,11 @@ export default function LibraryTools({
         },
         body: JSON.stringify({ includeScreenshots: includeImages }),
       });
-      if (!response.ok) throw new Error((await response.json()).error);
+      if (!response.ok) {
+        const failure = await response.json();
+        if (failure.library) onRefresh(failure.library);
+        throw new Error(failure.error);
+      }
       const url = URL.createObjectURL(await response.blob());
       const link = document.createElement('a');
       link.href = url;
@@ -112,8 +117,12 @@ export default function LibraryTools({
         body: file,
       });
       const result = await response.json();
-      if (!response.ok) throw new Error(result.error);
+      if (!response.ok) {
+        if (result.library) onRefresh(result.library);
+        throw new Error(result.error);
+      }
       onRestore(result);
+      if (result.storageCleanupPending) return;
       setMessage(
         t('项目库已恢复{0}。项目状态将重新探测。', [
           decision.checked

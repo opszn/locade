@@ -14,6 +14,8 @@
 
 默认 `~/.locade` 含项目路径、地址、访问记录与截图，页面可能暴露秘密。可按项目禁止 / 删除截图，或关闭全局截图删除当前封面。隐藏卡片不是删除图片，图片也不默认过期。
 
+Alpha.2 开发版区分许可 / 资料已提交与磁盘清理完成。出现清理未完成警告时，图片可能仍留磁盘；检查权限或存储后重试，完成前不要分享资料目录，不将“已禁止”当作“已清除”。
+
 本地备份可能包含元数据与主动选择的图片；应用内删除不会影响已导出备份、用户自行复制的文件或系统备份。恢复前仅保存元数据副本，不暗中保留已删除图片。不要把资料库、备份、session token、原始日志或私人检查图发到公开仓库。
 
 ## 依赖与分发
@@ -29,3 +31,9 @@
 不要将可利用细节、真实路径、截图、令牌或密钥发到公开 issue。若已意外泄露凭据，先在凭据所属服务吊销 / 轮换，再处理仓库历史；仅删除当前文件并不能撤销已经公开的秘密。
 
 已知限制见 `docs/QUALITY.md`；无全面 I/O 故障、所有竞争时序、所有系统版本或恶意页面沙箱验收的结论。
+
+## Feedback In English / 双语反馈
+
+For a vulnerability or private data exposure, use [private vulnerability reporting](https://github.com/opszn/locade/security/advisories/new), not a public issue. Never attach private libraries, screenshots, backups, personal paths, session tokens or credentials. No response SLA is promised. If a credential was exposed, revoke / rotate it at its original service; editing an issue does not undo disclosure.
+
+Ordinary bugs and first-use friction may be reported in English or Chinese following [feedback and privacy / 反馈与隐私](docs/FEEDBACK.md). Templates do not automatically redact data. 本分支模板不代替人工脱敏，也不扩展普通问题的私密客服承诺；敏感细节仍走私密安全入口。

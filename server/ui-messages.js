@@ -1,4 +1,14 @@
 export const englishMessages = {
+  '迁移副本格式无效，请先保留资料目录并检查':
+    'Invalid migration copy. Preserve the data directory and inspect it before continuing.',
+  '文件系统错误：{0}': 'Filesystem error: {0}',
+  截图版本无效: 'Invalid screenshot revision',
+  截图写入需要资料事务: 'Screenshot writes require a library transaction',
+  本机图片清理未完成: 'Local image cleanup is incomplete',
+  '部分旧图或临时图片尚未从磁盘清除。当前显示的是已保存的资料；未清理图片不会通过 Locade 展示。请检查磁盘权限或空间后重试，清理完成前不要分享资料目录。':
+    'Some old or temporary images could not be removed from disk. This view shows saved data; unreferenced images are not served by Locade. Check disk permissions or space and retry. Do not share the data directory until cleanup finishes.',
+  重试图片清理: 'Retry image cleanup',
+  '本机图片清理已完成。': 'Local image cleanup is complete.',
   尚未扫描: 'Not scanned yet',
   本机服务暂不可用: 'The local service is unavailable. Try reconnecting.',
   '已重新发现本机网页；在线状态以本轮探测为准。':

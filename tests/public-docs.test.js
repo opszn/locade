@@ -61,6 +61,11 @@ test('quick start pins the published source and separates optional browser insta
     assert.match(text, /v3/);
     assert.match(text, /v2/);
     assert.match(text, /ALPHA2_RELEASE_NOTES/);
+    assert.match(
+      commands(text).flat().join('\n'),
+      /git checkout --detach [a-f0-9]{40}/,
+    );
+    assert.match(text, /LOCADE_DATA_DIR="\$PWD\/\.locade"/);
   }
   assert.match(english, /does not change the browser download/);
   assert.match(english, /files.*does not prove.*launch/i);
@@ -116,6 +121,9 @@ test('release notes keep historical Alpha.1 evidence separate from the unrelease
   const zh = await read('docs/ALPHA2_RELEASE_NOTES.md');
   assert.match(en, /Unreleased draft/);
   assert.match(zh, /未发布草稿/);
+  assert.match(en, /merged into.*main/i);
+  assert.match(zh, /已合入.*main/);
+  assert.doesNotMatch(en, /These increments remain under review/);
   for (const text of [en, zh]) {
     for (const value of [
       'v3',
@@ -202,6 +210,8 @@ test('issue chooser routes sensitive reports privately, disables blank community
   assert.match(feedback, /不.*自动.*脱敏/);
   assert.match(feedback, /do not.*disable.*security/i);
   assert.match(feedback, /不.*关闭.*安全/);
+  assert.match(feedback, /server-side recognition, not visual acceptance/);
+  assert.match(feedback, /不冒称.*目视验收/);
 });
 
 test('public entry points link to quick start, bilingual release notes and privacy-safe feedback', async () => {
@@ -217,6 +227,10 @@ test('public entry points link to quick start, bilingual release notes and priva
     assert.match(
       text,
       file === 'README.md' ? /incomplete disk\s+cleanup/ : /清理未完成/,
+    );
+    assert.match(
+      text,
+      file === 'README.md' ? /main.*unreleased/i : /main.*未发布/,
     );
   }
   for (const file of ['CONTRIBUTING.md', 'SECURITY.md'])

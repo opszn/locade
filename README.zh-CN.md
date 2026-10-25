@@ -8,7 +8,7 @@
 
 **v0.3.0-alpha.1 · macOS 优先 · 本地存储 · MIT。** 当前建议使用源码 Web 版；不是部署平台，也不是项目进程管理器。菜单栏源码与打包工具已具备，但原生安装验收未完成，暂不提供正式 App / DMG 下载，也没有可用的 `npx locade` 命令。
 
-已发布 Alpha.1 的应用界面与详细文档主要为简体中文。Alpha.2 开发正在加入 Web 中英文切换与首次使用引导，见 [计划与实现状态](docs/ALPHA2_PLAN.md)；这些开发变更不代表已发布新版本或原生验收通过。
+已发布 Alpha.1 的应用界面与详细文档主要为简体中文。`main` 分支已包含**未发布的 Alpha.2 开发增量**：Web 中英文、首次引导和资料提交补强。默认 clone 得到开发源码；[快速使用](docs/QUICK_START.zh-CN.md) 分别提供已发布 Alpha.1 与已评审候选的固定提交用法。见 [计划与实现状态](docs/ALPHA2_PLAN.md)；源码合入不代表发布新版本或原生验收通过。
 
 [逐步快速使用](docs/QUICK_START.zh-CN.md) · [反馈与隐私](docs/FEEDBACK.md) · [Alpha.1 版本说明](docs/RELEASE_NOTES.md) · [Alpha.2 未发布草稿](docs/ALPHA2_RELEASE_NOTES.md)
 
@@ -116,3 +116,5 @@ GitHub 仓库 [opszn/locade](https://github.com/opszn/locade) 已在私有 CI �
 贡献前请读 [贡献说明](CONTRIBUTING.md)，安全问题请读 [安全说明](SECURITY.md)。
 
 敏感问题请使用 [GitHub 私密漏洞报告](https://github.com/opszn/locade/security/advisories/new)，不要公开私人项目资料或凭据。
+
+普通问题参照 [反馈指南](docs/FEEDBACK.md)。GitHub 已识别默认分支的两个模板；当前核验网络访问选择器页面超时，服务端识别不冒称页面目视验收。模板不会自动脱敏附件或文字。

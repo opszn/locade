@@ -136,9 +136,10 @@ service before upgrading. `PORT=0` requests a dynamically assigned loopback port
 - Screenshot resources are restricted to loopback; your everyday browser's login
   state is not reused. Pages depending on remote CDNs / APIs, WebSockets, or login
   may render incompletely. This is not a sandbox for malicious pages.
-- Disabling screenshots globally deletes all current covers; disabling them for
-  one project deletes that project's cover. Screenshots do not expire by default.
-  Deleting inside the app does not remove previously exported backups.
+- Disabling screenshots requests deletion of all current covers, or that project's
+  cover for a per-project change. Alpha.2 development reports incomplete disk
+  cleanup and provides a retry; do not share the data directory until it succeeds.
+  Screenshots do not expire by default. Deleting in Locade does not remove exported backups.
 - Weak identity evidence or transient races can still leave conservative
   duplicates or block a stale address. Matching titles do not establish matching
   projects; retaining old records is not a promise of automatic deduplication.

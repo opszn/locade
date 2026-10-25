@@ -392,7 +392,11 @@ test(
       await details.getByRole('button', { name: '完成', exact: true }).click();
     };
     const screenshotBytes = (project) =>
-      readFile(path.join(root, 'library', 'screenshots', `${project.id}.png`));
+      readFile(
+        app.store.screenshotPath(
+          app.store.state.projects.find((p) => p.id === project.id),
+        ),
+      );
     const assertSafeReuseButton = async (project, service) => {
       const button = card(project).getByRole('button', {
         name: '地址已被复用',

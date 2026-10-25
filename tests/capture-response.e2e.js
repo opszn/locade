@@ -70,10 +70,10 @@ test(
     requests = 0;
     assert.equal((await api(`projects/${id}/screenshot`)).status, 200);
     const previousTimestamp = store.state.projects[0].screenshot;
-    const image = path.join(store.screenshots, `${id}.png`);
+    const image = () => store.screenshotPath(store.state.projects[0]);
     const hash = async () =>
       createHash('sha256')
-        .update(await readFile(image))
+        .update(await readFile(image()))
         .digest('hex');
     const previousHash = await hash();
     for (mode of ['error', 'json']) {
@@ -97,7 +97,7 @@ test(
     assert.equal((await api(`projects/${id}/screenshot`)).status, 200);
     assert.notEqual(store.state.projects[0].screenshot, previousTimestamp);
     assert.equal(
-      (await readFile(image)).subarray(0, 8).toString('hex'),
+      (await readFile(image())).subarray(0, 8).toString('hex'),
       '89504e470d0a1a0a',
     );
   },

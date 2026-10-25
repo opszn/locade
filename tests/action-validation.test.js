@@ -65,7 +65,9 @@ test('invalid multi-field project patches never delete an existing screenshot or
   const { store, api, first } = await setup(t);
   await api('settings', { screenshotsEnabled: true }, 'PATCH');
   assert.equal((await api(`projects/${first.id}/screenshot`)).status, 200);
-  const file = path.join(store.screenshots, `${first.id}.png`);
+  const file = store.screenshotPath(
+    store.state.projects.find((p) => p.id === first.id),
+  );
   const original = await readFile(file);
   const metadata = await readFile(store.file, 'utf8');
   for (const input of [

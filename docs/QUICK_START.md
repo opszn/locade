@@ -2,7 +2,7 @@
 
 English | [简体中文](QUICK_START.zh-CN.md)
 
-Updated 2026-10-24. The published source release is **v0.3.0-alpha.1**. Alpha.2 changes are **unreleased development**, not an App download. This guide separates both so you can tell which instructions apply.
+Updated 2026-10-25. The published source release is **v0.3.0-alpha.1**. Alpha.2 changes are merged into `main` but remain **unreleased development**, not an App download. This guide separates both so you can tell which instructions apply.
 
 ## 1. Install The Published Source
 
@@ -46,7 +46,7 @@ Only one instance can own a data directory. Default data lives in `~/.locade/`, 
 
 Start your own local web project in your usual terminal or IDE first. Locade never executes its startup scripts or stops it. Open the library to discover, or use Rediscover; visible, idle pages normally refresh every 20 seconds. You can turn foreground refresh off in settings. This is a recent probe result, not a live guarantee.
 
-Alpha.1 uses Chinese labels. The unreleased Alpha.2 branch adds the English equivalents shown here; a pinned Alpha.1 checkout will not show a language picker or the new guide.
+Alpha.1 uses Chinese labels. Unreleased Alpha.2 development on `main` adds the English equivalents shown here; a pinned Alpha.1 checkout will not show a language picker or the new guide.
 
 | Task | Alpha.1 Chinese label | Alpha.2 English label |
 | ---- | --------------------- | -------------------- |
@@ -70,7 +70,22 @@ Use the card's Open project action rather than an old raw URL. Known reused addr
 
 ## 3. What Changes In Alpha.2 Development
 
-These features require the relevant development commits, not just an Alpha.1 version number. Read the [unreleased notes](ALPHA2_RELEASE_NOTES.en.md) and the branch / commit before trying development source. This guide does not ask you to switch an everyday library to an unmerged branch.
+These features require the relevant development commits, not just an Alpha.1 version number. Read the [unreleased notes](ALPHA2_RELEASE_NOTES.en.md) before trying development source. The reviewed candidate merged into `main` at `76b884e`; it is not a release tag. For an optional isolated tryout, use a **new source folder and separate empty data directory**, not your everyday library:
+
+```sh
+git clone https://github.com/opszn/locade.git locade-alpha2
+cd locade-alpha2
+git checkout --detach 76b884eea2d0502b8311f883df459e532c18aded
+```
+
+Choose one `npm ci` option from section 1 in this new folder, then:
+
+```sh
+npm run build
+PORT=4401 LOCADE_DATA_DIR="$PWD/.locade" npm start
+```
+
+If that port is occupied, choose another unused port; never stop an unknown service. Optional Chromium installation and explicit screenshot consent still apply. These commands are instructions, not evidence of an independent person's installation or a started one-week study.
 
 - **Quick start** reopens the dismissible first-use guide. A language picker follows supported browser languages or a local explicit choice. Project names, paths, and Git branches are not translated.
 - Screenshot browser readiness checks executable files only; it does not prove the browser can launch under your system policy. Retry checks do not install or execute a browser. A missing browser does not disable discovery, favorites or opening.

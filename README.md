@@ -14,9 +14,12 @@ has not passed acceptance. There is no official App / DMG download or published
 `npx locade` command.
 
 The published Alpha.1 application interface and most detailed documentation are in
-Simplified Chinese. Development toward Alpha.2 adds a Chinese / English web UI
-and first-use guidance; see the [plan and implementation status](docs/ALPHA2_PLAN.md).
-These development changes are not a new release or native app acceptance.
+Simplified Chinese. The `main` branch includes **unreleased Alpha.2 development**:
+a Chinese / English web UI, first-use guidance, and safer data commits. A default
+clone uses this development source; the [quick start](docs/QUICK_START.md) offers
+separate pinned instructions for published Alpha.1 and the reviewed candidate.
+See the [plan and implementation status](docs/ALPHA2_PLAN.md). Merging source is
+not a new release or native app acceptance.
 
 [Step-by-step quick start](docs/QUICK_START.md) · [Feedback and privacy](docs/FEEDBACK.md) ·
 [Alpha.1 release notes](docs/RELEASE_NOTES.en.md) · [Alpha.2 unreleased draft](docs/ALPHA2_RELEASE_NOTES.en.md)
@@ -205,6 +208,7 @@ Read [Contributing (Chinese)](CONTRIBUTING.md) before contributing, and
 [Security (Chinese)](SECURITY.md) before reporting a security issue. Use
 [GitHub's private vulnerability reporting](https://github.com/opszn/locade/security/advisories/new)
 for sensitive reports; do not post private project data or credentials publicly.
-Use the [feedback guide](docs/FEEDBACK.md) for anonymous ordinary reports. The new
-GitHub templates take effect only after merging into the default branch; they do
-not automatically redact attachments or text.
+Use the [feedback guide](docs/FEEDBACK.md) for anonymous ordinary reports. GitHub
+recognizes both templates on the default branch. Direct browser verification of
+the chooser timed out on the verification network; server-side recognition is not
+visual acceptance. Templates do not automatically redact attachments or text.

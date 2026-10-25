@@ -61,7 +61,7 @@ export async function capture(url, destination, excludedPort) {
     if (error instanceof CaptureNavigationError) throw error;
     if (error.message.includes("Executable doesn't exist")) {
       throw new Error(
-        '缺少截图浏览器，请在终端运行 npx playwright install chromium',
+        '缺少截图浏览器，请在项目目录运行 npm exec --no -- playwright install chromium',
       );
     }
     throw new Error(

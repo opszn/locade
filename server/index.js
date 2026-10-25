@@ -1,5 +1,5 @@
 import http from 'node:http';
-import { readFile, rename, rm, chmod, writeFile } from 'node:fs/promises';
+import { readFile, rm, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -24,6 +24,8 @@ import {
 } from './project-actions.js';
 import { sendNavigationError } from './navigation-error.js';
 import { APP_VERSION } from './version.js';
+import { normalizeLanguage, translateMessage } from './i18n.js';
+import { screenshotCapability } from './capabilities.js';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const types = {
@@ -55,6 +57,11 @@ async function body(request) {
 }
 
 function send(response, status, value) {
+  if (value?.error)
+    value = {
+      ...value,
+      error: translateMessage(value.error, response.locadeLocale),
+    };
   response.writeHead(status, {
     'Content-Type': 'application/json; charset=utf-8',
     'Cache-Control': 'no-store',
@@ -68,9 +75,11 @@ export async function createApp({
   capturePage = capture,
   inspectProject = inspectUrl,
   openProjectDirectory = openDirectory,
+  screenshotStatus = screenshotCapability,
+  storageIO,
 } = {}) {
   const release = await acquireInstance(dataDir);
-  const store = new Store(dataDir);
+  const store = new Store(dataDir, { io: storageIO });
   try {
     await store.init();
   } catch (error) {
@@ -79,18 +88,21 @@ export async function createApp({
   }
   const token = randomUUID();
   const instance = randomUUID();
-  const library = () => ({
-    ...store.state,
-    projects: store.state.projects.map((project) => ({
-      ...project,
-      reviewKey: projectReviewKey(project),
-    })),
-    token,
-    instance,
-    application: 'locade',
-    appVersion: APP_VERSION,
-    dataDirectory: dataDir,
-  });
+  const library = () => {
+    const state = store.snapshot();
+    return {
+      ...state,
+      projects: state.projects.map((project) => ({
+        ...project,
+        reviewKey: projectReviewKey(project),
+      })),
+      token,
+      instance,
+      application: 'locade',
+      appVersion: APP_VERSION,
+      dataDirectory: dataDir,
+    };
+  };
   let scanPending = null;
   const scan = (port) => {
     if (scanPending) return scanPending;
@@ -137,6 +149,8 @@ export async function createApp({
     return scanPending;
   };
   const server = http.createServer(async (request, response) => {
+    response.locadeLocale =
+      normalizeLanguage(request.headers['x-locade-language']) || 'zh-CN';
     response.setHeader('X-Content-Type-Options', 'nosniff');
     response.setHeader('X-Frame-Options', 'DENY');
     response.setHeader('Referrer-Policy', 'no-referrer');
@@ -192,6 +206,8 @@ export async function createApp({
           return send(response, 200, library());
         if (request.method === 'GET' && pathname === '/api/storage')
           return send(response, 200, await store.storageUsage());
+        if (request.method === 'GET' && pathname === '/api/capabilities')
+          return send(response, 200, { screenshots: await screenshotStatus() });
         if (!['POST', 'PATCH', 'DELETE'].includes(request.method))
           return send(response, 404, { error: '接口不存在' });
         const supplied = Buffer.from(request.headers['x-locade-token'] || '');
@@ -227,6 +243,11 @@ export async function createApp({
             archive,
             request.headers['x-locade-images'] === 'include',
           );
+          return send(response, 200, library());
+        }
+        if (pathname === '/api/storage/cleanup' && request.method === 'POST') {
+          await body(request);
+          await store.retryCleanup();
           return send(response, 200, library());
         }
         const input = await body(request);
@@ -278,7 +299,6 @@ export async function createApp({
           if (pathname === '/api/screenshots' && request.method === 'DELETE') {
             for (const project of store.state.projects)
               await store.deleteScreenshot(project);
-            await store.garbageCollect();
             return;
           }
           const match = pathname.match(
@@ -330,21 +350,30 @@ export async function createApp({
               throw new Error('请先允许本机截图');
             if (project.hidden) throw new Error('已忽略的项目不能截图');
             assertProjectAddress(project);
-            const current = await inspectProject(project.url);
+            const current = structuredClone(await inspectProject(project.url));
             verifyProjectPage(project, current, port);
-            const destination = path.join(
-              store.screenshots,
-              `${project.id}.png`,
-            );
-            const temporary = `${destination}.tmp`;
-            try {
+            await store.stageScreenshot(project, async (temporary) => {
               await capturePage(project.url, temporary, port);
-              await chmod(temporary, 0o600);
-              await rename(temporary, destination);
-              project.screenshot = new Date().toISOString();
-            } finally {
-              await rm(temporary, { force: true });
-            }
+              const after = await inspectProject(project.url);
+              verifyProjectPage(project, after, port);
+              if (
+                (current.observation &&
+                  current.observation !== after.observation) ||
+                (current.identity &&
+                  current.identity.key !== after.identity?.key)
+              )
+                throw new Error(
+                  '端口所属项目已变化或暂时无法确认，请重新发现后操作',
+                );
+              if (
+                current.title !== after.title &&
+                !(
+                  current.identity &&
+                  current.identity.key === after.identity?.key
+                )
+              )
+                throw new Error('页面身份可能已变化，请重新发现后操作');
+            });
           } else if (match[2] === 'screenshot' && request.method === 'DELETE') {
             await store.deleteScreenshot(project);
           } else if (match[2] === 'opened' && request.method === 'POST') {
@@ -390,15 +419,16 @@ export async function createApp({
       let file;
       if (/^\/screenshots\/[a-f0-9-]{36}\.png$/.test(pathname)) {
         const id = path.basename(pathname, '.png');
+        const committed = store.snapshot();
+        const project = committed.projects.find((item) => item.id === id);
         if (
-          !store.state.screenshotsEnabled ||
-          !store.state.projects.some(
-            (item) => item.id === id && item.screenshot,
-          )
+          !committed.screenshotsEnabled ||
+          !project?.screenshot ||
+          project.captureAllowed === false
         ) {
           return send(response, 404, { error: '截图不存在' });
         }
-        file = path.join(store.screenshots, `${id}.png`);
+        file = store.screenshotPath(project);
       } else if (pathname === '/navigation-error.css') {
         file = path.join(root, 'server/navigation-error.css');
       } else if (/^\/brand\/[a-z-]+\.svg$/.test(pathname)) {
@@ -426,14 +456,25 @@ export async function createApp({
         return sendNavigationError(
           response,
           error.message || '当前项目无法打开，请重新发现。',
+          normalizeLanguage(
+            new URL(request.url, 'http://localhost').searchParams.get('lang'),
+          ) ||
+            normalizeLanguage(
+              request.headers['accept-language']?.split(',')[0]?.split(';')[0],
+            ) ||
+            'zh-CN',
         );
       if (error.code === 'ENOENT')
         return send(response, request.url.startsWith('/api/') ? 400 : 404, {
           error: request.url.startsWith('/api/')
             ? '目录或本机文件不存在，请检查路径；截图备份缺文件时可仅导出元数据'
             : '文件不存在，请先运行 npm run build',
+          ...(request.url.startsWith('/api/') ? { library: library() } : {}),
         });
-      send(response, 400, { error: error.message || '操作失败' });
+      send(response, 400, {
+        error: error.message || '操作失败',
+        ...(request.url.startsWith('/api/') ? { library: library() } : {}),
+      });
     }
   });
   server.requestTimeout = 30000;

@@ -80,6 +80,7 @@ async function setup(t) {
   const base = await listen(app.server);
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage({
+    locale: 'zh-CN',
     viewport: { width: 1440, height: 1000 },
     reducedMotion: 'reduce',
   });
@@ -128,7 +129,18 @@ async function setup(t) {
     await card(id).locator('.project-binding').click();
     await details.waitFor();
   };
-  const cover = (id) => path.join(app.store.screenshots, `${id}.png`);
+  const coverFiles = new Map(
+    app.store.state.projects.map((project) => [
+      project.id,
+      app.store.screenshotPath(project),
+    ]),
+  );
+  const cover = (id) => {
+    const project = app.store.state.projects.find((p) => p.id === id);
+    if (project?.screenshot || !coverFiles.has(id))
+      coverFiles.set(id, app.store.screenshotPath(project));
+    return coverFiles.get(id);
+  };
   const seedCovers = async () => {
     await app.store.transaction(async () => {
       app.store.state.screenshotsEnabled = true;

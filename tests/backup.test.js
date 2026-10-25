@@ -43,10 +43,7 @@ test('backups round-trip pictures only with consent, remap IDs, leave metadata r
   assert.notEqual(restored.id, old.id);
   assert.equal(restored.favorite, true);
   assert.equal(restored.online, false);
-  assert.deepEqual(
-    await readFile(path.join(store.screenshots, `${restored.id}.png`)),
-    png,
-  );
+  assert.deepEqual(await readFile(store.screenshotPath(restored)), png);
   await assert.rejects(access(path.join(store.screenshots, `${old.id}.png`)));
   const recovery = JSON.parse(
     await readFile(path.join(store.directory, 'before-restore.json')),

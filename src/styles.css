@@ -845,6 +845,18 @@ kbd {
   padding: 0;
   align-self: start;
 }
+.notice.storage-warning {
+  flex-direction: column;
+  gap: 8px;
+  overflow-wrap: anywhere;
+}
+.storage-warning p {
+  margin: 0;
+  color: inherit;
+}
+.storage-warning .button {
+  padding: 8px 12px;
+}
 dialog {
   width: min(480px, calc(100% - 32px));
   padding: 28px;
@@ -1762,5 +1774,166 @@ dialog {
   }
   .project-binding small {
     font-size: 10px;
+  }
+}
+
+/* The language control and guide share the existing paper-and-ink palette. */
+.topbar-tools {
+  gap: 12px;
+}
+.language-picker {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--muted);
+}
+.language-picker select {
+  font: inherit;
+  color: var(--ink);
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 7px;
+  max-width: 138px;
+}
+.guide-link {
+  font-size: 11px;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.getting-started {
+  margin: 0 0 32px;
+  padding: 25px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--accent);
+  border-radius: 8px;
+}
+.guide-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 15px;
+}
+.guide-heading h2 {
+  margin: 10px 0 18px;
+  font-family: Editorial, 'Songti SC', Georgia, serif;
+  font-size: 25px;
+  font-weight: 500;
+}
+.guide-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 25px;
+  padding: 0;
+  list-style: none;
+  counter-reset: guide;
+}
+.guide-steps li {
+  counter-increment: guide;
+  min-width: 0;
+}
+.guide-steps li::before {
+  content: '0' counter(guide);
+  display: block;
+  font: 11px monospace;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+.guide-steps strong {
+  font-size: 13px;
+}
+.guide-steps p,
+.browser-readiness p {
+  font-size: 12px;
+  color: var(--muted);
+}
+.browser-readiness {
+  padding: 16px 0;
+  border-top: 1px dashed var(--line);
+}
+.browser-readiness > strong {
+  font-size: 12px;
+}
+.install-command {
+  display: block;
+  padding: 12px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 12px;
+  user-select: all;
+}
+:lang(en) .nav-item {
+  font-size: 12px;
+}
+:lang(en) .hero h1 {
+  font-size: clamp(40px, 4.5vw, 68px);
+}
+:lang(en) .collection-meta {
+  white-space: normal;
+}
+@media (max-width: 900px) {
+  .guide-steps {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .guide-steps li::before {
+    float: left;
+    margin: 3px 12px 0 0;
+  }
+}
+@media (max-width: 680px) {
+  .topbar {
+    height: auto;
+    min-height: 65px;
+    flex-wrap: wrap;
+    padding: 10px 0;
+    gap: 8px;
+  }
+  .topbar-tools {
+    margin-left: auto;
+    width: 100%;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .topbar > div {
+    flex-shrink: 0;
+    max-width: 100%;
+  }
+  .settings-link {
+    position: static;
+    margin: 10px 0;
+  }
+  .language-picker > span {
+    display: none;
+  }
+  .language-picker select {
+    max-width: 114px;
+  }
+  .guide-link {
+    font-size: 10px;
+  }
+  .getting-started {
+    padding: 18px;
+  }
+  .guide-heading h2 {
+    font-size: 22px;
+  }
+  :lang(en) .library-toolbar {
+    flex-wrap: wrap;
+  }
+  :lang(en) .nav-item {
+    font-size: 10px;
+    white-space: normal;
+  }
+  :lang(en) .filterbar {
+    flex-wrap: wrap;
+  }
+  :lang(en) .search {
+    flex: 1;
+    min-width: 130px;
   }
 }

@@ -36,6 +36,7 @@ test(
     });
     await mkdir('test-results', { recursive: true });
     const page = await browser.newPage({
+      locale: 'zh-CN',
       viewport: { width: 1440, height: 1040 },
       reducedMotion: 'reduce',
     });
@@ -233,6 +234,7 @@ test(
       await rm(dataDir, { recursive: true, force: true });
     });
     const page = await browser.newPage({
+      locale: 'zh-CN',
       viewport: { width: 1440, height: 1080 },
       reducedMotion: 'reduce',
     });
@@ -345,6 +347,7 @@ test(
       await rm(dataDir, { recursive: true, force: true });
     });
     const page = await browser.newPage({
+      locale: 'zh-CN',
       viewport: { width: 1440, height: 1040 },
       reducedMotion: 'reduce',
     });

@@ -96,6 +96,7 @@ test(
       await rm(dir, { recursive: true, force: true });
     });
     const page = await browser.newPage({
+      locale: 'zh-CN',
       viewport: { width: 1440, height: 1000 },
       reducedMotion: 'reduce',
     });
@@ -287,7 +288,7 @@ test(
       await close(target);
       await rm(dir, { recursive: true, force: true });
     });
-    const page = await browser.newPage();
+    const page = await browser.newPage({ locale: 'zh-CN' });
     forbidNativeDialogs(page, t);
     page.setDefaultTimeout(5000);
     await page.goto(`${base}${entry}`);
@@ -296,7 +297,7 @@ test(
     const original = library.projects[0];
     assert.equal(
       await page.getByRole('link', { name: '打开项目' }).getAttribute('href'),
-      `/open/${original.id}`,
+      `/open/${original.id}?lang=zh-CN`,
     );
     current = {
       ...current,

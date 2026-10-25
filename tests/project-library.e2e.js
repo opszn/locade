@@ -279,6 +279,7 @@ test(
     report.browserExecutable = executablePath || chromium.executablePath();
     browser = await chromium.launch({ headless: true, executablePath });
     const context = await browser.newContext({
+      locale: 'zh-CN',
       viewport: { width: 1440, height: 1100 },
       reducedMotion: 'reduce',
     });
@@ -391,7 +392,11 @@ test(
       await details.getByRole('button', { name: '完成', exact: true }).click();
     };
     const screenshotBytes = (project) =>
-      readFile(path.join(root, 'library', 'screenshots', `${project.id}.png`));
+      readFile(
+        app.store.screenshotPath(
+          app.store.state.projects.find((p) => p.id === project.id),
+        ),
+      );
     const assertSafeReuseButton = async (project, service) => {
       const button = card(project).getByRole('button', {
         name: '地址已被复用',
@@ -509,7 +514,7 @@ test(
         await search.fill('');
         const opened = context.waitForEvent('response', {
           predicate: (response) =>
-            response.url() === `${base}/open/${sprout.id}`,
+            response.url() === `${base}/open/${sprout.id}?lang=zh-CN`,
         });
         const popupReady = page.waitForEvent('popup');
         await card(sprout)

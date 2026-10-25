@@ -18,6 +18,9 @@ Simplified Chinese. Development toward Alpha.2 adds a Chinese / English web UI
 and first-use guidance; see the [plan and implementation status](docs/ALPHA2_PLAN.md).
 These development changes are not a new release or native app acceptance.
 
+[Step-by-step quick start](docs/QUICK_START.md) · [Feedback and privacy](docs/FEEDBACK.md) ·
+[Alpha.1 release notes](docs/RELEASE_NOTES.en.md) · [Alpha.2 unreleased draft](docs/ALPHA2_RELEASE_NOTES.en.md)
+
 Alpha.2 development also hardens data and screenshot commits. Its local library
 format is v3; legacy covers keep their filenames, and an original metadata copy
 is kept before migration. Older source must not write to this upgraded directory.
@@ -133,9 +136,10 @@ service before upgrading. `PORT=0` requests a dynamically assigned loopback port
 - Screenshot resources are restricted to loopback; your everyday browser's login
   state is not reused. Pages depending on remote CDNs / APIs, WebSockets, or login
   may render incompletely. This is not a sandbox for malicious pages.
-- Disabling screenshots globally deletes all current covers; disabling them for
-  one project deletes that project's cover. Screenshots do not expire by default.
-  Deleting inside the app does not remove previously exported backups.
+- Disabling screenshots requests deletion of all current covers, or that project's
+  cover for a per-project change. Alpha.2 development reports incomplete disk
+  cleanup and provides a retry; do not share the data directory until it succeeds.
+  Screenshots do not expire by default. Deleting in Locade does not remove exported backups.
 - Weak identity evidence or transient races can still leave conservative
   duplicates or block a stale address. Matching titles do not establish matching
   projects; retaining old records is not a promise of automatic deduplication.
@@ -170,7 +174,8 @@ results.
 
 ## Documentation and Status
 
-Detailed project notes are currently in Chinese:
+Quick-start and release notes are available in both languages; the detailed
+engineering notes are currently in Chinese:
 
 [Product requirements](docs/PRD.md) · [Installation](docs/INSTALLATION.md) ·
 [Known risks](docs/QUALITY.md) · [Interaction acceptance](docs/INTERACTION_AUDIT.md) ·
@@ -194,9 +199,12 @@ passed. Official App distribution, Developer ID signing / notarization, login-it
 and clean-machine acceptance, the full PRD, and a real one-week usage study are
 still unfinished. Existing local App / DMG builds do not represent the latest
 source and are not attached to this release. See the
-[Alpha release notes (Chinese)](docs/RELEASE_NOTES.md).
+[Alpha release notes](docs/RELEASE_NOTES.en.md).
 
 Read [Contributing (Chinese)](CONTRIBUTING.md) before contributing, and
 [Security (Chinese)](SECURITY.md) before reporting a security issue. Use
 [GitHub's private vulnerability reporting](https://github.com/opszn/locade/security/advisories/new)
 for sensitive reports; do not post private project data or credentials publicly.
+Use the [feedback guide](docs/FEEDBACK.md) for anonymous ordinary reports. The new
+GitHub templates take effect only after merging into the default branch; they do
+not automatically redact attachments or text.

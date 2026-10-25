@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Private security report / 私密安全报告
+    url: https://github.com/opszn/locade/security/advisories/new
+    about: Report vulnerabilities or private data exposure here, not in public issues / 漏洞或私人资料泄露请走此私密入口，勿公开细节

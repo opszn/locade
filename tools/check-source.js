@@ -7,7 +7,6 @@ const publicFiles = new Set([
   '.gitignore',
   '.npmrc',
   '.prettierrc.json',
-  'AGENTS.md',
   'CONTRIBUTING.md',
   'LICENSE',
   'README.md',

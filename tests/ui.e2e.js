@@ -11,6 +11,7 @@ import { capture } from '../server/capture.js';
 import { directoryIdentity } from '../server/identity.js';
 import { close, listen, fixture } from './helpers.js';
 import { decideConfirmation, forbidNativeDialogs } from './browser-helpers.js';
+import { APP_VERSION } from '../server/version.js';
 
 test(
   'real browser: discover → consent → screenshot → favorite → open → offline; desktop/mobile layouts',
@@ -47,6 +48,10 @@ test(
       if (message.type() === 'error') pageErrors.push(message.text());
     });
     await page.goto(base);
+    await page
+      .locator('.version')
+      .getByText(`v${APP_VERSION}`, { exact: true })
+      .waitFor();
     await page
       .getByRole('heading', { name: '好作品，不该藏在端口里。' })
       .waitFor();

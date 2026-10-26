@@ -7,6 +7,7 @@ import { format } from 'prettier';
 import { APP_VERSION } from '../server/version.js';
 import { messages } from '../server/i18n.js';
 
+const PUBLISHED_VERSION = '0.3.0-alpha.1';
 const root = path.resolve(fileURLToPath(new URL('../', import.meta.url)));
 const read = (file) => readFile(path.join(root, file), 'utf8');
 const pairs = [
@@ -31,7 +32,7 @@ test('paired public guides and release notes have matching shell examples and re
     assert.ok(zh.includes(`](${path.basename(english)})`), chinese);
     assert.deepEqual(commands(en), commands(zh), english);
     for (const text of [en, zh])
-      assert.ok(text.includes(`v${APP_VERSION}`), english);
+      assert.ok(text.includes(`v${PUBLISHED_VERSION}`), english);
   }
 });
 
@@ -42,7 +43,7 @@ test('quick start pins the published source and separates optional browser insta
     const shell = commands(text).flat().join('\n');
     assert.ok(
       shell.includes(
-        `git clone --branch v${APP_VERSION} --depth 1 https://github.com/opszn/locade.git`,
+        `git clone --branch v${PUBLISHED_VERSION} --depth 1 https://github.com/opszn/locade.git`,
       ),
     );
     for (const command of [
@@ -107,7 +108,7 @@ test('release notes keep historical Alpha.1 evidence separate from the unrelease
   for (const file of ['docs/RELEASE_NOTES.md', 'docs/RELEASE_NOTES.en.md']) {
     const text = await read(file);
     for (const value of [
-      `v${APP_VERSION}`,
+      `v${PUBLISHED_VERSION}`,
       '39892036075',
       '74/74',
       '10/10',
@@ -120,6 +121,7 @@ test('release notes keep historical Alpha.1 evidence separate from the unrelease
   const en = await read('docs/ALPHA2_RELEASE_NOTES.en.md');
   const zh = await read('docs/ALPHA2_RELEASE_NOTES.md');
   assert.match(en, /Unreleased draft/);
+  for (const text of [en, zh]) assert.ok(text.includes(`v${APP_VERSION}`));
   assert.match(zh, /未发布草稿/);
   assert.match(en, /merged into.*main/i);
   assert.match(zh, /已合入.*main/);
@@ -133,7 +135,7 @@ test('release notes keep historical Alpha.1 evidence separate from the unrelease
       'FEEDBACK.md',
     ])
       assert.ok(text.includes(value));
-    assert.ok(text.includes(`v${APP_VERSION}`));
+    assert.ok(text.includes(`v${PUBLISHED_VERSION}`));
   }
   assert.match(en, /not.*power-loss/i);
   assert.match(en, /real.*one-week/i);

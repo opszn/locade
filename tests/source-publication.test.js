@@ -184,3 +184,20 @@ test('public source selection fails closed on unreviewed roots, symlinks, nested
   );
   await assert.rejects(publicManifest(root), /需脱敏/);
 });
+
+test('internal agent instructions are rejected at the root and inside allowed source directories', async (t) => {
+  const root = await fixture(t);
+  for (const file of [
+    'AGENTS.md',
+    'src/AGENTS.md',
+    'src/agents.override.md',
+    'src/CLAUDE.md',
+    'src/GEMINI.md',
+    '.github/copilot-instructions.md',
+  ]) {
+    await mkdir(path.dirname(path.join(root, file)), { recursive: true });
+    await writeFile(path.join(root, file), 'internal instructions');
+    await assert.rejects(publicManifest(root), /内部代理指令/);
+    await rm(path.join(root, file));
+  }
+});

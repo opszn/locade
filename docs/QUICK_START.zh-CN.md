@@ -70,12 +70,12 @@ npm exec --no -- playwright install chromium
 
 ## 3. Alpha.2 开发增量有什么不同
 
-以下功能需要对应开发提交，不是包版本写着 Alpha.1 就具备。尝试前读 [未发布说明](ALPHA2_RELEASE_NOTES.md)。已评审候选在 `76b884e` 合入 `main`，这不是发布 tag。若自愿隔离试用，请使用**新源码目录和独立的空资料目录**，而非日用库：
+以下功能需要对应开发提交，不是包版本写着 Alpha.1 就具备。尝试前读 [未发布说明](ALPHA2_RELEASE_NOTES.md)。已评审候选在 `7780323` 合入 `main`，这不是发布 tag。若自愿隔离试用，请使用**新源码目录和独立的空资料目录**，而非日用库：
 
 ```sh
 git clone https://github.com/opszn/locade.git locade-alpha2
 cd locade-alpha2
-git checkout --detach 76b884eea2d0502b8311f883df459e532c18aded
+git checkout --detach 77803231e286d8036265e913cf2743f0f31c745c
 ```
 
 在这个新目录选择第 1 节的一种 `npm ci` 方式，然后：

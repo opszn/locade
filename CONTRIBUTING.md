@@ -1,10 +1,10 @@
 # 贡献与本地开发
 
-Locade 当前为 v0.3.0-alpha.1 源码 Alpha，采用 [MIT 许可证](LICENSE)，仓库为 [opszn/locade](https://github.com/opszn/locade)。提交贡献前请确认有权按本项目 MIT 许可提供对应内容；保留第三方版权与许可，不提交私人资料或未经授权的代码。
+Locade 当前为 `v0.3.0-alpha.2` 候选源码，采用 [MIT 许可证](LICENSE)，仓库为 [opszn/locade](https://github.com/opszn/locade)。提交贡献前请确认有权按本项目 MIT 许可提供对应内容；保留第三方版权与许可，不提交私人资料或未经授权的代码。
 
 ## 开始前
 
-先读 `README.md`、`AGENTS.md`、`docs/PROJECT_CONTEXT.md` 与 `docs/QUALITY.md`。界面工作须查看 `design/brand/preview.png`，沿用暖纸色、炭黑与橙红，不擅自替换品牌。
+先读 `README.md`、`docs/PROJECT_CONTEXT.md` 与 `docs/QUALITY.md`。界面工作须查看 `design/brand/preview.png`，沿用暖纸色、炭黑与橙红，不擅自替换品牌。代理 / 编辑器内部规则不属于公开仓库文件。
 
 安装可选公共官方源或公共国内镜像，完整说明见 `docs/INSTALLATION.md`。不要提交企业源、npm 认证或个人安装配置。
 

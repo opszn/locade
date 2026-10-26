@@ -70,12 +70,12 @@ Use the card's Open project action rather than an old raw URL. Known reused addr
 
 ## 3. What Changes In Alpha.2 Development
 
-These features require the relevant development commits, not just an Alpha.1 version number. Read the [unreleased notes](ALPHA2_RELEASE_NOTES.en.md) before trying development source. The reviewed candidate merged into `main` at `76b884e`; it is not a release tag. For an optional isolated tryout, use a **new source folder and separate empty data directory**, not your everyday library:
+These features require the relevant development commits, not just an Alpha.1 version number. Read the [unreleased notes](ALPHA2_RELEASE_NOTES.en.md) before trying development source. The reviewed candidate merged into `main` at `7780323`; it is not a release tag. For an optional isolated tryout, use a **new source folder and separate empty data directory**, not your everyday library:
 
 ```sh
 git clone https://github.com/opszn/locade.git locade-alpha2
 cd locade-alpha2
-git checkout --detach 76b884eea2d0502b8311f883df459e532c18aded
+git checkout --detach 77803231e286d8036265e913cf2743f0f31c745c
 ```
 
 Choose one `npm ci` option from section 1 in this new folder, then:

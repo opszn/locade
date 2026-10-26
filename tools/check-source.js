@@ -55,6 +55,13 @@ const reviewedImages = new Set([
   'design/brand/preview.png',
   'design/screenshots/library.png',
 ]);
+const internalInstructions =
+  /^(?:agents(?:\.override)?|claude|gemini|copilot-instructions)\.md$/i;
+
+function rejectInternalInstructions(name) {
+  if (internalInstructions.test(name))
+    throw new Error('内部代理指令不属于公开源码');
+}
 
 export function validateLock(lock) {
   if (lock.lockfileVersion !== 3 || !lock.packages?.[''])
@@ -121,6 +128,7 @@ export async function publicManifest(root) {
     if (info.isSymbolicLink())
       throw new Error(`公开源码不接受链接：${relative}`);
     const name = path.basename(relative);
+    rejectInternalInstructions(name);
     if (info.isDirectory()) {
       if (relative.includes('/') && name.startsWith('.'))
         throw new Error(`嵌套隐藏目录需要人工审核：${relative}`);
@@ -144,6 +152,7 @@ export async function publicManifest(root) {
     files.push({ file: relative, bytes: bytes.length, sha256: hash(bytes) });
   }
   for (const name of (await readdir(root)).sort()) {
+    rejectInternalInstructions(name);
     if (excluded.has(name)) continue;
     if (publicFiles.has(name)) {
       const info = await lstat(path.join(root, name));

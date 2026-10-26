@@ -7,7 +7,10 @@ English | [简体中文](README.zh-CN.md)
 A local-first visual library for your development projects. Recognize what you
 built from real screenshots, keep it in your collection, and find your way back.
 
-**v0.3.0-alpha.1 · macOS-first · Local storage · MIT.** Use the source-based web
+**v0.3.0-alpha.2 candidate · macOS-first · Local storage · MIT.** This checkout
+prepares the next prerelease; the published source release is still v0.3.0-alpha.1 until
+the candidate is explicitly published. See [candidate packaging status](docs/MACOS_ALPHA2_PREVIEW.md).
+Use the source-based web
 app for now. Locade is neither a deployment platform nor a project process
 manager. The menu-bar source and packaging tools exist, but native installation
 has not passed acceptance. There is no official App / DMG download or published

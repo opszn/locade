@@ -18,6 +18,7 @@ struct Library: Decodable {
     let token: String
     let projects: [Project]
     let autoRefresh: Bool?
+    let appVersion: String?
 }
 struct Runtime: Codable {
     let pid: Int32
@@ -37,6 +38,8 @@ struct Health: Decodable {
     @Published var busy = true
     @Published var loginEnabled = SMAppService.mainApp.status == .enabled
     @Published var lastRefresh: Date?
+    @Published var serviceVersion = ""
+    let appVersion = Bundle.main.object(forInfoDictionaryKey: "LocadeVersion") as? String ?? "unknown"
     var port: Int?
     var token = ""
     var instance = ""
@@ -74,6 +77,7 @@ struct Health: Decodable {
         let library = try JSONDecoder().decode(Library.self, from: data)
         guard library.application == "locade", library.instance == instance else { throw NSError(domain: "Locade", code: 3, userInfo: [NSLocalizedDescriptionKey: "端口已不属于此 Locade 实例；为安全起见已断开"]) }
         projects = library.projects; token = library.token; autoRefresh = library.autoRefresh != false
+        serviceVersion = library.appVersion ?? "unknown"
         lastRefresh = Date(); error = ""
         message = ownsService ? "本机运行 · 退出将关闭自身后台" : "已连接现有服务 · 退出不会停止它"
     }
@@ -116,7 +120,8 @@ struct Health: Decodable {
                 let size = (try? FileManager.default.attributesOfItem(atPath: logURL.path)[.size] as? NSNumber)?.intValue ?? 0
                 if size > 1024 * 1024 { try Data().write(to: logURL) }
             } else { FileManager.default.createFile(atPath: logURL.path, contents: nil, attributes: [.posixPermissions: 0o600]) }
-            log = try FileHandle(forWritingTo: logURL); try log?.seekToEnd()
+            log = try FileHandle(forWritingTo: logURL)
+            let logOffset = try log?.seekToEnd() ?? 0
             process.standardOutput = log; process.standardError = log
             try process.run(); child = process; ownsService = true
             for _ in 0..<80 {
@@ -129,11 +134,29 @@ struct Health: Decodable {
                 }
                 try await Task.sleep(nanoseconds: 150_000_000)
             }
-            throw NSError(domain: "Locade", code: 4, userInfo: [NSLocalizedDescriptionKey: "后台启动失败。请查看 ~/.locade/desktop.log；可能已有实例或资料库损坏。"])
+            var explanation = "后台未能就绪。请查看 ~/.locade/desktop.log；不要删除或降级资料库。"
+            if !process.isRunning {
+                let reader = try? FileHandle(forReadingFrom: logURL)
+                defer { try? reader?.close() }
+                try? reader?.seek(toOffset: logOffset)
+                let output = String(data: (try? reader?.read(upToCount: 16384)) ?? Data(), encoding: .utf8) ?? ""
+                if output.contains("资料库格式不受支持") {
+                    explanation = "此 App 无法读取当前资料格式。请使用支持该格式的新版本；不要删除资料或用旧 JSON 覆盖。"
+                } else if output.contains("此资料库已有 Locade 实例运行") {
+                    explanation = "已有 Locade 后台占用此资料目录，但暂时无法连接。请检查原入口，不要删除实例锁或停止未知进程。"
+                } else if process.terminationReason == .uncaughtSignal {
+                    explanation = "后台进程被信号终止（\(process.terminationStatus)）。请检查本机进程管控记录，不要关闭安全策略或反复移动应用。"
+                } else {
+                    explanation = "后台已退出（代码 \(process.terminationStatus)）。请查看 ~/.locade/desktop.log；不要删除或降级资料库。"
+                }
+            }
+            port = nil; token = ""; instance = ""
+            throw NSError(domain: "Locade", code: 4, userInfo: [NSLocalizedDescriptionKey: explanation])
         } catch { self.error = error.localizedDescription; message = "服务未就绪"; busy = false; if smokeTest { print("LOCADE_SMOKE_FAILED \(error)"); NSApp.terminate(nil) } }
     }
     func refresh(scan: Bool) async {
-        guard !operation else { return }
+        // A periodic refresh must not replace the actual startup failure with "not ready".
+        guard port != nil, !operation else { return }
         operation = true; if scan { busy = true }
         defer { operation = false; busy = false }
         do { try await fetchLibrary(scan: scan) } catch { self.error = error.localizedDescription }
@@ -211,6 +234,8 @@ struct PopoverView: View {
                 Spacer()
                 Button("退出") { NSApp.terminate(nil) }.font(.caption)
             }
+            Text("App v\(model.appVersion) · 后台 \(model.serviceVersion.isEmpty ? "未连接" : "v" + model.serviceVersion)")
+                .font(.system(size: 9, design: .monospaced)).foregroundColor(.secondary).textSelection(.enabled)
             if let refreshed = model.lastRefresh { Text("最近同步 \(refreshed.formatted(date: .omitted, time: .shortened)) · 不自动截图").font(.system(size: 9)).foregroundColor(.secondary) }
         }
         .padding(20).frame(width: 360, height: 540)
@@ -237,14 +262,14 @@ struct PopoverView: View {
         if let icon = Bundle.main.url(forResource: "menubar", withExtension: "png"), let image = NSImage(contentsOf: icon) {
             image.size = NSSize(width: 19, height: 19); image.isTemplate = true; item.button?.image = image
         } else { item.button?.image = NSImage(systemSymbolName: "circle.circle", accessibilityDescription: "Locade") }
-        item.button?.toolTip = "Locade · 本地项目游乐场"
+        item.button?.toolTip = "Locade v\(model.appVersion) · 本地项目游乐场"
         item.button?.target = self; item.button?.action = #selector(toggle)
         popover.behavior = .transient; popover.delegate = self
         popover.contentViewController = NSHostingController(rootView: PopoverView(model: model))
         Task { await model.start(); if CommandLine.arguments.contains("--show") { toggle() } }
         timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { [weak self] _ in
             Task { @MainActor in
-                guard let self, self.model.isVisible, !self.model.busy else { return }
+                guard let self, self.model.isVisible, !self.model.busy, self.model.port != nil else { return }
                 self.ticks += 1
                 await self.model.refresh(scan: self.ticks % 4 == 0 && self.model.autoRefresh && !self.model.noDiscovery)
             }

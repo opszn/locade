@@ -6,6 +6,8 @@ Updated 2026-10-25. **Unreleased draft — no Alpha.2 release, tag, npm package 
 
 ## Source Changes Merged Into `main`
 
+Packaging preparation now assigns **v0.3.0-alpha.2** to the candidate, not an Alpha.1 version string. See [native candidate status](MACOS_ALPHA2_PREVIEW.md). A version bump or a draft is not a published release; package validation and explicit publication are separate.
+
 - [PR #6](https://github.com/opszn/locade/pull/6): Chinese / English web UI, explicit local language preference or browser language, dates, known errors, ten confirmation classes and navigation failure pages. User names / paths / branches are not translated; unknown external diagnostics stay verbatim. No menu-bar translation or execution is claimed.
 - The dismissible / reopenable first-use guide explains discovery and explicit screenshot consent, shows a read-only browser-file readiness check, a fixed manual install command and retry paths. It does not download, install, launch the checked browser, turn on consent or reuse browser login state. Initial service connection can be retried in the app.
 - [PR #7](https://github.com/opszn/locade/pull/7), stacked on #6: screenshot files have independent revisions; failed metadata commits keep original metadata / covers. Library / image / usage reads use a committed snapshot. Capture checks ownership before and after; uncertainty or reuse blocks replacement rather than inheriting the wrong image.

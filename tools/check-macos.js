@@ -5,6 +5,7 @@ import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import assert from 'node:assert/strict';
+import { APP_VERSION } from '../server/version.js';
 import {
   releasePaths,
   assertReleaseDirectory,
@@ -35,6 +36,19 @@ console.log('✓ 内置 Node 仅依赖系统动态库，无 Homebrew 路径');
 const manifest = JSON.parse(
   await readFile(path.join(app, 'Contents/Resources/BUILD.json')),
 );
+assert.equal(manifest.version, APP_VERSION);
+const bundledMetadata = JSON.parse(
+  await readFile(path.join(runtime, 'package.json')),
+);
+assert.equal(bundledMetadata.version, APP_VERSION);
+const { stdout: bundleVersion } = await exec('/usr/bin/plutil', [
+  '-extract',
+  'LocadeVersion',
+  'raw',
+  path.join(app, 'Contents/Info.plist'),
+]);
+assert.equal(bundleVersion.trim(), APP_VERSION);
+console.log(`✓ App / 包内后台 / 构建清单版本均为 ${APP_VERSION}`);
 if (manifest.sources) {
   const count = await verifyPackagedSources(app, manifest.sources);
   assert.equal(

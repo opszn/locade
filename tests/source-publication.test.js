@@ -42,6 +42,28 @@ test('source release metadata, runtime version, bundle version and lock root agr
   assert.match(license, /Copyright \(c\) 2026 Locade contributors/);
 });
 
+test('native version is visible and startup failures cannot be overwritten by disconnected refreshes', async () => {
+  const native = await readFile(
+    new URL('../macos/Locade.swift', import.meta.url),
+    'utf8',
+  );
+  const build = await readFile(
+    new URL('../tools/build-macos.js', import.meta.url),
+    'utf8',
+  );
+  assert.match(
+    build,
+    /<key>LocadeVersion<\/key><string>\$\{APP_VERSION\}<\/string>/,
+  );
+  assert.match(native, /Text\("App v\\\(model\.appVersion\)/);
+  assert.match(native, /serviceVersion = library\.appVersion/);
+  assert.match(native, /guard port != nil, !operation else/);
+  assert.match(native, /self\.model\.port != nil else/);
+  assert.match(native, /output\.contains\("资料库格式不受支持"\)/);
+  assert.match(native, /seek\(toOffset: logOffset\)/);
+  assert.match(native, /不要删除资料或用旧 JSON 覆盖/);
+});
+
 test('English and Chinese READMEs link to each other and keep executable examples in sync', async () => {
   const english = await readFile(
     new URL('../README.md', import.meta.url),

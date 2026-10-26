@@ -133,6 +133,15 @@ await exec(
 );
 await mkdir(release, { recursive: true });
 const sources = await sourceManifest(root);
+let sourceCommit = null;
+try {
+  const { stdout } = await exec('/usr/bin/git', ['rev-parse', 'HEAD'], {
+    cwd: root,
+  });
+  if (/^[a-f0-9]{40}$/.test(stdout.trim())) sourceCommit = stdout.trim();
+} catch {
+  // Source archives may have no Git metadata; the byte manifest remains authoritative.
+}
 await mkdir(app);
 await mkdir(path.join(app, 'Contents/MacOS'), { recursive: true });
 await mkdir(runtime, { recursive: true });
@@ -178,6 +187,7 @@ await writeFile(
       arch,
       builtAt: new Date().toISOString(),
       signing: 'ad-hoc; not notarized',
+      sourceCommit,
       sources,
     },
     null,
@@ -253,7 +263,8 @@ await writeFile(
   `<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"><plist version="1.0"><dict>
 <key>CFBundleExecutable</key><string>Locade</string><key>CFBundleIdentifier</key><string>local.locade.prototype</string>
 <key>CFBundleName</key><string>Locade</string><key>CFBundleDisplayName</key><string>Locade</string>
-<key>CFBundleVersion</key><string>3</string><key>CFBundleShortVersionString</key><string>${BUNDLE_VERSION}</string>
+<key>CFBundleVersion</key><string>302</string><key>CFBundleShortVersionString</key><string>${BUNDLE_VERSION}</string>
+<key>LocadeVersion</key><string>${APP_VERSION}</string>
 <key>CFBundlePackageType</key><string>APPL</string><key>CFBundleIconFile</key><string>Locade</string>
 <key>LSUIElement</key><true/><key>LSMinimumSystemVersion</key><string>13.0</string>
 <key>NSHighResolutionCapable</key><true/><key>NSAppTransportSecurity</key><dict><key>NSAllowsLocalNetworking</key><true/></dict>

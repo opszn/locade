@@ -22,7 +22,10 @@ await mkdir(staging, { recursive: true });
 await cp(app, path.join(staging, 'Locade.app'), {
   recursive: true,
 });
-await cp(path.join(root, 'docs/MACOS.md'), path.join(staging, '请先阅读.txt'));
+await cp(
+  path.join(root, 'docs/MACOS_ALPHA2_PREVIEW.md'),
+  path.join(staging, '请先阅读.txt'),
+);
 await exec('/bin/ln', [
   '-s',
   '/Applications',
@@ -33,7 +36,7 @@ await exec(
   [
     'create',
     '-volname',
-    'Locade Local Preview',
+    `Locade ${APP_VERSION}`,
     '-srcfolder',
     staging,
     '-format',

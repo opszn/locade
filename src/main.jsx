@@ -436,7 +436,7 @@ function App() {
           </button>
           <div className="version">
             <span className="status-dot" /> LOCAL MODE{' '}
-            <span>{t('v0.3 本机预览')}</span>
+            <span>{library?.appVersion ? `v${library.appVersion}` : '—'}</span>
           </div>
         </div>
       </aside>
